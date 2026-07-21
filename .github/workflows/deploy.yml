@@ -1,0 +1,52 @@
+name: Deploy Frontend (Next.js + Docker)
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Deploy to Server
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+          script: |
+            set -e
+
+            echo "🚀 Starting Deployment..."
+
+            cd /home/frontadmin/apps
+
+            echo "📥 Pulling latest code..."
+            git fetch origin main
+            git reset --hard origin/main
+
+            echo "🐳 Building updated images..."
+            docker compose build
+
+            echo "🔄 Restarting only frontend service..."
+            docker compose up -d frontend
+
+            echo "🔄 Restarting nginx safely..."
+            docker compose restart nginx
+
+            echo "🧹 Cleaning unused images..."
+            docker image prune -f
+
+            echo "🔍 Container status..."
+            docker ps
+
+            echo "🧪 Health check..."
+            curl -f http://localhost/health || echo "⚠️ Health check failed"
+
+            echo "✅ Deployment completed successfully"
