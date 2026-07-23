@@ -127,10 +127,6 @@ export const NAV_BY_ROLE: Record<UserRole, NavItem[]> = {
           title: "Transactions",
           url: "/dashboard/transactions",
         },
-        {
-          title: "Fuel Requests",
-          url: "/dashboard/fuel-requests",
-        },
       ],
     },
 

@@ -1,219 +1,73 @@
-"use client"
+"use client";
 
-import { useEffect, useState } from "react"
+import { Construction, Sparkles, Clock3 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 
-// -----------------------------
-// Role
-// -----------------------------
-type Role = "admin" | "station_manager" | "station_staff"
-
-// -----------------------------
-// MOCK DATA
-// -----------------------------
-const MOCK_ADMIN_STATS = {
-  totalStations: 42,
-  totalDrivers: 1280,
-  totalUsers: 3420,
-  totalRequests: 9850,
-  activeRequests: 120,
-  completedRequests: 9420,
-  revenue: 125000,
-
-  // 📷 CAMERA SYSTEM
-  cameraActive: 28,
-  cameraInactive: 10,
-  cameraMissing: 4,
-
-  // ❌ REJECTION
-  rejectedTotal: 410,
-  rejectedToday: 32,
-
-  // 🚨 RISK
-  fraudAlerts: 18,
-  highRiskUsers: 7,
-  blockedAccounts: 23,
-}
-
-// -----------------------------
-// AUTH MOCK
-// -----------------------------
-function useUserRole(): Role | null {
-  return "station_manager"
-}
-
-// -----------------------------
-// CARD COMPONENT
-// -----------------------------
-function Card({
-  title,
-  value,
-  hint,
-  danger,
-}: {
-  title: string
-  value: number | string
-  hint: string
-  danger?: boolean
-}) {
+export default function DashboardPage() {
   return (
-    <div
-      className={`h-28 rounded-xl flex flex-col items-center justify-center text-sm text-center
-      ${danger ? "bg-red-100 text-red-700" : "bg-muted/50"}`}
-    >
-      <p className="text-xs opacity-60">{title}</p>
-      <p className="text-xl font-bold">{value}</p>
-      <p className="text-[10px] opacity-50 px-2 leading-tight">{hint}</p>
-    </div>
-  )
-}
+    <div className="flex min-h-[calc(100vh-120px)] items-center justify-center px-6">
+      <div className="mx-auto max-w-2xl text-center">
+        {/* Icon */}
+        <div className="mx-auto flex h-24 w-24 items-center justify-center rounded-3xl bg-gradient-to-br from-primary/15 via-primary/10 to-primary/5 ring-1 ring-primary/20 shadow-lg">
+          <Construction className="h-12 w-12 text-primary" />
+        </div>
 
+        {/* Status */}
+        <div className="mt-6 flex justify-center">
+          <Badge
+            variant="secondary"
+            className="gap-2 rounded-full px-4 py-1 text-sm"
+          >
+            <Clock3 className="h-4 w-4" />
+            Under Development
+          </Badge>
+        </div>
 
-// -----------------------------
-// ADMIN DASHBOARD
-// -----------------------------
-function AdminDashboard() {
-  const [data, setData] = useState<typeof MOCK_ADMIN_STATS | null>(null)
+        {/* Heading */}
+        <h1 className="mt-6 text-4xl font-bold tracking-tight">
+          Dashboard Coming Soon
+        </h1>
 
-  useEffect(() => {
-    const t = setTimeout(() => setData(MOCK_ADMIN_STATS), 400)
-    return () => clearTimeout(t)
-  }, [])
+        {/* Description */}
+        <p className="mt-4 text-muted-foreground text-lg leading-8">
+          We're building a smarter and more powerful dashboard to provide
+          real-time analytics, AI insights, station monitoring, reports, and
+          operational management.
+        </p>
 
-  if (!data) return <div className="p-4">Loading...</div>
+        {/* Feature Preview */}
+        <div className="mt-10 grid gap-4 sm:grid-cols-2">
+          <div className="rounded-2xl border bg-card p-5 text-left shadow-sm">
+            <Sparkles className="mb-3 h-6 w-6 text-primary" />
+            <h3 className="font-semibold">Smart Analytics</h3>
+            <p className="mt-2 text-sm text-muted-foreground">
+              Live KPIs, AI-powered insights, operational statistics, and
+              performance monitoring.
+            </p>
+          </div>
 
-  return (
-    <div className="grid gap-3 md:grid-cols-3">
+          <div className="rounded-2xl border bg-card p-5 text-left shadow-sm">
+            <Construction className="mb-3 h-6 w-6 text-primary" />
+            <h3 className="font-semibold">More Features</h3>
+            <p className="mt-2 text-sm text-muted-foreground">
+              Queue monitoring, camera integration, reports, driver
+              management, fuel station operations, and much more.
+            </p>
+          </div>
+        </div>
 
-      {/* CORE SYSTEM */}
-      <Card title="Users" value={data.totalUsers}
-        hint="Total registered platform users"
-      />
-      <Card title="Drivers" value={data.totalDrivers}
-        hint="Active drivers using the system"
-      />
-      <Card title="Stations" value={data.totalStations}
-        hint="Registered service/fuel stations"
-      />
+        {/* Footer */}
+        <div className="mt-10">
+          <Button disabled size="lg" className="rounded-xl px-8">
+            Feature in Development
+          </Button>
 
-      <Card title="Requests" value={data.totalRequests}
-        hint="All-time service requests created"
-      />
-      <Card title="Active Requests" value={data.activeRequests}
-        hint="Requests currently being processed"
-      />
-      <Card title="Completed Requests" value={data.completedRequests}
-        hint="Successfully completed service requests"
-      />
-
-      <Card title="Revenue" value={`$${data.revenue}`}
-        hint="Total system-generated revenue"
-      />
-
-      {/* 📷 CAMERA AI SYSTEM */}
-      <Card title="AI Camera Active" value={data.cameraActive}
-        hint="Stations sending live AI queue data"
-      />
-      <Card title="Camera Inactive" value={data.cameraInactive} danger
-        hint="Camera installed but not connected to AI"
-      />
-      <Card title="No Camera" value={data.cameraMissing} danger
-        hint="Stations without camera hardware"
-      />
-
-      {/* ❌ REJECTION SYSTEM */}
-      <Card title="Total Rejected" value={data.rejectedTotal} danger
-        hint="All rejected service requests"
-      />
-      <Card title="Rejected Today" value={data.rejectedToday} danger
-        hint="Requests rejected in last 24 hours"
-      />
-
-      {/* 🚨 FRAUD / RISK SYSTEM */}
-      <Card title="Fraud Alerts" value={data.fraudAlerts} danger
-        hint="Detected suspicious system activities"
-      />
-      <Card title="High Risk Users" value={data.highRiskUsers} danger
-        hint="Users flagged by risk scoring engine"
-      />
-      <Card title="Blocked Accounts" value={data.blockedAccounts} danger
-        hint="Users restricted from system access"
-      />
-    </div>
-  )
-}
-
-// -----------------------------
-// STATION ADMIN
-// -----------------------------
-function StationAdminDashboard() {
-  const m = {
-    queue: 12,
-    today: 45,
-    staff: 8,
-    fuel: "82%",
-    done: 390,
-    pending: 6,
-  }
-
-  return (
-    <div className="grid gap-3 md:grid-cols-3">
-      <Card title="Queue" value={m.queue} hint="Vehicles waiting in line" />
-      <Card title="Today Requests" value={m.today} hint="Today's station workload" />
-      <Card title="Staff" value={m.staff} hint="Active station employees" />
-
-      <Card title="Fuel Level" value={m.fuel} hint="Current fuel availability" />
-      <Card title="Completed" value={m.done} hint="Finished station operations" />
-      <Card title="Pending" value={m.pending} hint="Waiting admin approval" />
-
-    </div>
-  )
-}
-
-// -----------------------------
-// STAFF
-// -----------------------------
-function StationStaffDashboard() {
-  const m = {
-    tasks: 5,
-    queue: 9,
-    done: 32,
-  }
-
-  return (
-    <div className="grid gap-3 md:grid-cols-3">
-      <Card title="Assigned Tasks" value={m.tasks}
-        hint="Tasks assigned to you"
-      />
-      <Card title="Queue" value={m.queue}
-        hint="Vehicles currently waiting"
-      />
-      <Card title="Completed Today" value={m.done}
-        hint="Your completed operations today"
-      />
-
-      <div className="md:col-span-3 h-[250px] rounded-xl bg-muted/50 flex items-center justify-center">
-        Quick Actions Panel
+          <p className="mt-4 text-sm text-muted-foreground">
+            This module will be available in a future update.
+          </p>
+        </div>
       </div>
     </div>
-  )
-}
-
-// -----------------------------
-// ROUTER
-// -----------------------------
-export default function DashboardPage() {
-  const role = useUserRole()
-
-  if (!role) return <div>Loading...</div>
-
-  switch (role) {
-    case "admin":
-      return <AdminDashboard />
-    case "station_manager":
-      return <StationAdminDashboard />
-    case "station_staff":
-      return <StationStaffDashboard />
-    default:
-      return <div>Unauthorized</div>
-  }
+  );
 }
