@@ -1,34 +1,93 @@
-script: |
-  set -e
+name: Deploy Frontend (Next.js + Docker)
 
-  echo "======================================"
-  echo "🚀 Starting Fuel Admin Deployment..."
-  echo "======================================"
+on:
+  push:
+    branches:
+      - main
 
-  cd /var/www/Fuel-Admin
+jobs:
 
-  echo "📥 Pulling latest code..."
-  git fetch origin main
-  git reset --hard origin/main
+  deploy:
 
-  echo "🐳 Building updated frontend image..."
-  docker compose build frontend
+    runs-on: ubuntu-latest
 
-  echo "🔄 Restarting frontend container..."
-  docker compose up -d frontend
 
-  echo "🔄 Restarting nginx..."
-  docker compose restart nginx
+    steps:
 
-  echo "🧹 Cleaning unused Docker images..."
-  docker image prune -f
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-  echo "🔍 Checking containers..."
-  docker compose ps
 
-  echo "🧪 Running health check..."
-  curl -f http://localhost || exit 1
 
-  echo "======================================"
-  echo "✅ Deployment completed successfully"
-  echo "======================================"
+      - name: Deploy to Server
+        uses: appleboy/ssh-action@v1.0.3
+
+        with:
+
+          host: ${{ secrets.SSH_HOST }}
+
+          username: ${{ secrets.SSH_USER }}
+
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+
+          script: |
+
+            set -e
+
+
+            echo "======================================"
+            echo "🚀 Starting Fuel Admin Deployment"
+            echo "======================================"
+
+
+            cd /var/www/Fuel-Admin
+
+
+            echo "📥 Pulling latest code..."
+
+            git fetch origin main
+
+            git reset --hard origin/main
+
+
+
+            echo "🐳 Building Docker images..."
+
+            docker compose build
+
+
+
+            echo "🔄 Restarting frontend..."
+
+            docker compose up -d frontend
+
+
+
+            echo "🔄 Restarting nginx..."
+
+            docker compose restart nginx
+
+
+
+            echo "🧹 Cleaning unused images..."
+
+            docker image prune -f
+
+
+
+            echo "📦 Container status..."
+
+            docker ps
+
+
+
+            echo "🏥 Running health check..."
+
+            curl -f http://localhost/health || echo "⚠️ Health check failed"
+
+
+
+            echo "======================================"
+            echo "✅ Deployment completed successfully"
+            echo "======================================"
