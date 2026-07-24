@@ -1,52 +1,34 @@
-name: Deploy Frontend (Next.js + Docker)
+script: |
+  set -e
 
-on:
-  push:
-    branches:
-      - main
+  echo "======================================"
+  echo "🚀 Starting Fuel Admin Deployment..."
+  echo "======================================"
 
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
+  cd /var/www/Fuel-Admin
 
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+  echo "📥 Pulling latest code..."
+  git fetch origin main
+  git reset --hard origin/main
 
-      - name: Deploy to Server
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
+  echo "🐳 Building updated frontend image..."
+  docker compose build frontend
 
-          script: |
-            set -e
+  echo "🔄 Restarting frontend container..."
+  docker compose up -d frontend
 
-            echo "🚀 Starting Deployment..."
+  echo "🔄 Restarting nginx..."
+  docker compose restart nginx
 
-            cd /home/frontadmin/apps
+  echo "🧹 Cleaning unused Docker images..."
+  docker image prune -f
 
-            echo "📥 Pulling latest code..."
-            git fetch origin main
-            git reset --hard origin/main
+  echo "🔍 Checking containers..."
+  docker compose ps
 
-            echo "🐳 Building updated images..."
-            docker compose build
+  echo "🧪 Running health check..."
+  curl -f http://localhost || exit 1
 
-            echo "🔄 Restarting only frontend service..."
-            docker compose up -d frontend
-
-            echo "🔄 Restarting nginx safely..."
-            docker compose restart nginx
-
-            echo "🧹 Cleaning unused images..."
-            docker image prune -f
-
-            echo "🔍 Container status..."
-            docker ps
-
-            echo "🧪 Health check..."
-            curl -f http://localhost/health || echo "⚠️ Health check failed"
-
-            echo "✅ Deployment completed successfully"
+  echo "======================================"
+  echo "✅ Deployment completed successfully"
+  echo "======================================"
