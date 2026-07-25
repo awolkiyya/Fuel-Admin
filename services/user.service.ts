@@ -14,19 +14,26 @@ export interface GetUsersParams {
 }
 
 /* -----------------------------
-   CREATE / UPDATE TYPES (STRICT)
+   CREATE / UPDATE TYPES
 ------------------------------ */
 export type CreateUserPayload = {
   fullName: string
   email: string
   password: string
   phoneNumber?: string
-  role: "station_manager" // 🔒 locked for your system
+  role: "station_manager"
   status: "active" | "inactive"
   stationId?: string
 }
 
 export type UpdateUserPayload = Partial<Omit<CreateUserPayload, "password">>
+
+/* -----------------------------
+   RESET PASSWORD TYPE
+------------------------------ */
+export type ResetUserPasswordPayload = {
+  password: string
+}
 
 /* -----------------------------
    USER SERVICE
@@ -60,7 +67,7 @@ export const userService = {
   },
 
   /* -----------------------------
-     CREATE USER (STATION MANAGER ONLY)
+     CREATE USER
   ------------------------------ */
   createUser: async (
     data: CreateUserPayload
@@ -80,6 +87,24 @@ export const userService = {
       `/users/${id}`,
       data
     )
+
+    return res.data
+  },
+
+  /* -----------------------------
+     RESET USER PASSWORD
+  ------------------------------ */
+  resetUserPassword: async (
+    id: string,
+    password: string
+  ): Promise<SingleResponse<null>> => {
+    const res = await api.patch<SingleResponse<null>>(
+      `/users/${id}/reset-password`,
+      {
+        password,
+      }
+    )
+
     return res.data
   },
 

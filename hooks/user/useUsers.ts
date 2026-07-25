@@ -1,5 +1,6 @@
 import { userService, GetUsersParams } from "@/services/user.service"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
+import { toast } from "sonner"
 
 /* =====================================================
    📋 GET USERS (LIST)
@@ -24,19 +25,7 @@ export const useUsers = (params: GetUsersParams) => {
         status: params.status || undefined,
       }),
 
-    // keepPreviousData: true,
     staleTime: 1000 * 30,
-  })
-}
-
-/* =====================================================
-   👤 GET SINGLE USER
-===================================================== */
-export const useUser = (id?: string) => {
-  return useQuery({
-    queryKey: ["user", id],
-    queryFn: () => userService.getUser(id!),
-    enabled: !!id,
   })
 }
 
@@ -49,8 +38,10 @@ export const useCreateUser = () => {
   return useMutation({
     mutationFn: userService.createUser,
 
-    onSuccess: () => {
+    onSuccess: (response) => {
       queryClient.invalidateQueries({ queryKey: ["users"] })
+
+      toast.success(response.message)
     },
   })
 }
@@ -70,8 +61,30 @@ export const useUpdateUser = () => {
       data: any
     }) => userService.updateUser(id, data),
 
-    onSuccess: () => {
+    onSuccess: (response) => {
       queryClient.invalidateQueries({ queryKey: ["users"] })
+      queryClient.invalidateQueries({ queryKey: ["user"] })
+
+      toast.success(response.message)
+    },
+  })
+}
+
+/* =====================================================
+   🔐 RESET USER PASSWORD
+===================================================== */
+export const useResetUserPassword = () => {
+  return useMutation({
+    mutationFn: ({
+      id,
+      password,
+    }: {
+      id: string
+      password: string
+    }) => userService.resetUserPassword(id, password),
+
+    onSuccess: (response) => {
+      toast.success(response.message)
     },
   })
 }
@@ -85,27 +98,33 @@ export const useDeleteUser = () => {
   return useMutation({
     mutationFn: userService.deleteUser,
 
-    onSuccess: () => {
+    onSuccess: (response) => {
       queryClient.invalidateQueries({ queryKey: ["users"] })
+
+      toast.success(response.message)
     },
   })
 }
 
 /* =====================================================
-   ⚡ COMBINED ACTIONS (OPTIONAL BUT CLEAN UX)
+   ⚡ COMBINED ACTIONS
 ===================================================== */
 export const useUserActions = () => {
   const createUser = useCreateUser()
   const updateUser = useUpdateUser()
+  const resetUserPassword = useResetUserPassword()
   const deleteUser = useDeleteUser()
 
   return {
     createUser,
     updateUser,
+    resetUserPassword,
     deleteUser,
+
     isLoading:
       createUser.isPending ||
       updateUser.isPending ||
+      resetUserPassword.isPending ||
       deleteUser.isPending,
   }
 }

@@ -3,6 +3,7 @@ import axios, {
   AxiosError,
   InternalAxiosRequestConfig,
 } from "axios"
+import { toast } from "sonner";
 
 
 export const api = axios.create({
@@ -70,67 +71,158 @@ const processQueue = (error: any, token: string | null = null) => {
 ------------------------------ */
 api.interceptors.response.use(
   (res) => res,
+
   async (error: AxiosError) => {
-    const originalRequest: any = error.config
 
-    const status = error.response?.status
+    const originalRequest: any = error.config;
 
-    const formattedError: ApiError = {
-      message:
-        (error as AxiosError<ApiErrorResponse>)?.response?.data?.message ||
-        error.message ||
-        "Unexpected error",
-      status: error.response?.status,
-      data: error.response?.data,
+    const status = error.response?.status;
+
+    const requestUrl = originalRequest?.url || "";
+
+
+    const message =
+      (error.response?.data as ApiErrorResponse)?.message ||
+      error.message ||
+      "Unexpected error";
+
+
+    /*
+    =============================
+    LOGIN / PUBLIC AUTH ERRORS
+    =============================
+    */
+    if (
+      requestUrl.includes("/auth/login") ||
+      requestUrl.includes("/auth/register")
+    ) {
+
+      toast.error(message);
+
+      return Promise.reject({
+        message,
+        status,
+        data:error.response?.data,
+      });
     }
 
-    /* -----------------------------
-       AUTO REFRESH LOGIC
-    ------------------------------ */
-    if (status === 401 && !originalRequest._retry) {
+
+
+    /*
+    =============================
+    TOKEN EXPIRED
+    =============================
+    */
+    if (
+      status === 401 &&
+      !originalRequest._retry
+    ) {
+
       if (isRefreshing) {
-        return new Promise((resolve, reject) => {
-          failedQueue.push({ resolve, reject })
+
+        return new Promise((resolve,reject)=>{
+
+          failedQueue.push({
+            resolve,
+            reject
+          });
+
         })
-          .then((token) => {
-            originalRequest.headers.Authorization = `Bearer ${token}`
-            return api(originalRequest)
-          })
-          .catch((err) => Promise.reject(err))
+        .then((token)=>{
+
+          originalRequest.headers.Authorization =
+            `Bearer ${token}`;
+
+          return api(originalRequest);
+
+        })
+        .catch(err=>Promise.reject(err));
+
       }
 
-      originalRequest._retry = true
-      isRefreshing = true
+
+      originalRequest._retry = true;
+      isRefreshing = true;
+
 
       try {
-        // CALL REFRESH ENDPOINT
-        const res = await api.post("/auth/refresh")
 
-        const newAccessToken = res.data.accessToken
+        const res = await api.post(
+          "/auth/refresh"
+        );
 
-        setAuthToken(newAccessToken)
+
+        const newAccessToken =
+          res.data.accessToken;
+
+
+        setAuthToken(newAccessToken);
+
 
         api.defaults.headers.common.Authorization =
-          `Bearer ${newAccessToken}`
+          `Bearer ${newAccessToken}`;
 
-        processQueue(null, newAccessToken)
+
+        processQueue(
+          null,
+          newAccessToken
+        );
+
 
         originalRequest.headers.Authorization =
-          `Bearer ${newAccessToken}`
+          `Bearer ${newAccessToken}`;
 
-        return api(originalRequest)
-      } catch (refreshError) {
-        processQueue(refreshError, null)
 
-        clearAuthToken()
-        window.location.href = "/"
+        return api(originalRequest);
 
-        return Promise.reject(refreshError)
+
+      } catch(refreshError){
+
+        processQueue(
+          refreshError,
+          null
+        );
+
+
+        clearAuthToken();
+
+
+        toast.error(
+          "Session expired. Please login again."
+        );
+
+
+        window.location.href =
+          "/auth/login";
+
+
+        return Promise.reject(refreshError);
+
+
       } finally {
-        isRefreshing = false
+
+        isRefreshing=false;
+
       }
+
     }
 
-    return Promise.reject(formattedError)
+
+
+    /*
+    =============================
+    OTHER API ERRORS
+    =============================
+    */
+
+    toast.error(message);
+
+
+    return Promise.reject({
+      message,
+      status,
+      data:error.response?.data,
+    });
+
   }
-)
+);

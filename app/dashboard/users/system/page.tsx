@@ -48,9 +48,32 @@ export default function UsersPage() {
     status,
   })
 
-  const { createUser, updateUser, isLoading: isSubmitting } = useUserActions()
-
+  const {
+    createUser,
+    updateUser,
+    resetUserPassword,
+    isLoading: isSubmitting,
+  } = useUserActions()
   /* ================= HANDLERS ================= */
+
+  const handleResetPassword = async (
+    userId: string,
+    password: string
+  ) => {
+    resetUserPassword.mutate(
+      {
+        id: userId,
+        password:
+          password,
+      },
+      {
+        onSuccess: () => {
+          setOpenPasswordModal(false)
+          setPasswordUser(null)
+        },
+      }
+    )
+  }
 
   const handleAddUser = () => {
     setSelectedUser(null)
@@ -89,7 +112,7 @@ export default function UsersPage() {
 
   /* ================= UI ================= */
   return (
-    <div className="space-y-4 max-w-6xl mx-auto">
+    <div className="space-y-4 max-w-4xl mx-auto">
 
       {/* HEADER */}
       <div className="flex items-center justify-between">
@@ -208,10 +231,10 @@ export default function UsersPage() {
         onClose={() => {
           setOpenPasswordModal(false)
           setPasswordUser(null)
-        } }
-        onSubmit={function (userId: string, password: string): Promise<void> | void {
-          throw new Error("Function not implemented.")
-        } }      />
+        }}
+        onSubmit={handleResetPassword}
+        isLoading={resetUserPassword.isPending}
+      />
     </div>
   )
 }

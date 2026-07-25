@@ -44,7 +44,7 @@ export function NavUser({ user }: { user: AuthUser }) {
   const handleLogout = () => {
     clearAuthToken()
     dispatch(logout())
-    router.push("/")
+    router.push("/auth/login")
   }
 
   const getInitials = (name?: string) =>

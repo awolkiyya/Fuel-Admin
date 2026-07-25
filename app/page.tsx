@@ -32,14 +32,23 @@ import {
   Mail,
   Loader2,
   AlertCircle,
+  Globe,
+  Sun,
+  Moon,
 } from "lucide-react";
 import ProductPreview from "@/components/landing/ProductPreview";
 import { useRouter } from "next/navigation";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { useTheme } from "next-themes";
 
 /* =========================================================
    DESIGN TOKENS
    Color: asphalt charcoal (#1C1917) + fuel amber (#EA580C)
            + route teal (#0D9488), warm card (#FDF6EC)
+   Light mode swaps the roles of asphalt charcoal and warm
+   card: charcoal becomes the text/ink color, warm card
+   becomes the page background. Accents (amber/teal) stay
+   the same in both modes.
    Type:  condensed bold display (signage feel) / clean sans body
            / mono for stats (pump-readout feel)
 ========================================================= */
@@ -50,6 +59,12 @@ const NAV_LINKS = [
   { id: "finder", label: "AI finder" },
   { id: "faq", label: "FAQ" },
 ];
+
+const LANGUAGES = [
+  { code: "en", label: "English" },
+  { code: "om", label: "Afaan Oromoo" },
+  { code: "am", label: "አማርኛ" },
+]
 
 /* =========================================================
    HEADER
@@ -64,6 +79,12 @@ const Header: React.FC<{
 }> = ({ activeSection, onNavigate,siginIn }) => {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+
+  const {
+    theme,
+    setTheme,
+    resolvedTheme,
+  } = useTheme()
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
@@ -97,7 +118,7 @@ const Header: React.FC<{
       <header
         className={`fixed inset-x-0 top-0 z-50 transition-colors duration-300 ${
           scrolled || menuOpen
-            ? "border-b border-white/10 bg-[#1C1917]/90 backdrop-blur-md"
+            ? "border-b border-black/10 bg-[#FDF6EC]/90 backdrop-blur-md dark:border-white/10 dark:bg-[#1C1917]/90"
             : "border-b border-transparent bg-transparent"
         }`}
       >
@@ -108,11 +129,19 @@ const Header: React.FC<{
               e.preventDefault();
               handleNav("hero");
             }}
-            className="flex items-center gap-2 rounded-md focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:ring-offset-2 focus-visible:ring-offset-[#1C1917]"
+            className="flex items-center gap-2 rounded-md focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:ring-offset-2 focus-visible:ring-offset-[#FDF6EC] dark:focus-visible:ring-offset-[#1C1917]"
           >
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-orange-500">
-              <Fuel className="h-4 w-4 text-white" />
-            </div>
+            
+            <img
+              src="/images/mark.png"
+              alt="Logo"
+              className="
+                h-7
+                w-7
+                md:h-8
+                md:w-8
+              "
+            />
             <span className="text-sm font-bold tracking-tight">FuelConnect</span>
           </a>
 
@@ -132,8 +161,8 @@ const Header: React.FC<{
                 aria-current={activeSection === link.id ? "page" : undefined}
                 className={`relative rounded-md px-3 py-2 text-[13px] font-medium transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 ${
                   activeSection === link.id
-                    ? "text-white"
-                    : "text-white/50 hover:text-white/80"
+                    ? "text-[#1C1917] dark:text-white"
+                    : "text-black/50 hover:text-black/80 dark:text-white/50 dark:hover:text-white/80"
                 }`}
               >
                 {link.label}
@@ -148,10 +177,78 @@ const Header: React.FC<{
             <Button
                 onClick={siginIn}
                 variant="outline"
-              className="h-9 border-white/15 bg-transparent text-xs text-white hover:bg-white/10 hover:text-white"
+              className="h-9 border-black/15 bg-transparent text-xs text-[#1C1917] hover:bg-black/5 hover:text-[#1C1917] dark:border-white/15 dark:text-white dark:hover:bg-white/10 dark:hover:text-white"
             >
               Sign in
             </Button>
+            {/* Controls */}
+        <div
+          className="
+            flex
+            items-center
+            gap-2
+          "
+        >
+
+          {/* Language */}
+          <DropdownMenu>
+
+            <DropdownMenuTrigger asChild>
+
+              <Button
+                variant="ghost"
+                size="icon"
+              >
+                <Globe className="h-4 w-4"/>
+              </Button>
+
+            </DropdownMenuTrigger>
+
+
+            <DropdownMenuContent align="end">
+
+              {
+                LANGUAGES.map((lang)=>(
+                  <DropdownMenuItem
+                    key={lang.code}
+                  >
+                    {lang.label}
+                  </DropdownMenuItem>
+                ))
+              }
+
+            </DropdownMenuContent>
+
+
+          </DropdownMenu>
+
+
+
+          {/* Theme */}
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() =>
+              setTheme(
+                resolvedTheme === "dark"
+                ? "light"
+                : "dark"
+              )
+            }
+          >
+
+            {
+              resolvedTheme === "dark"
+              ?
+              <Sun className="h-4 w-4"/>
+              :
+              <Moon className="h-4 w-4"/>
+            }
+
+          </Button>
+
+
+        </div>
           </div>
 
           {/* mobile toggle */}
@@ -160,7 +257,7 @@ const Header: React.FC<{
             onClick={() => setMenuOpen((v) => !v)}
             aria-expanded={menuOpen}
             aria-label={menuOpen ? "Close menu" : "Open menu"}
-            className="flex h-9 w-9 items-center justify-center rounded-lg border border-white/15 text-white md:hidden focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500"
+            className="flex h-9 w-9 items-center justify-center rounded-lg border border-black/15 text-[#1C1917] dark:border-white/15 dark:text-white md:hidden focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500"
           >
             {menuOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
           </button>
@@ -168,7 +265,7 @@ const Header: React.FC<{
 
         {/* mobile menu panel */}
         {menuOpen && (
-          <div className="border-t border-white/10 bg-[#1C1917] px-6 pb-6 pt-2 md:hidden">
+          <div className="border-t border-black/10 bg-[#FDF6EC] px-6 pb-6 pt-2 dark:border-white/10 dark:bg-[#1C1917] md:hidden">
             <nav aria-label="Mobile" className="flex flex-col">
               {NAV_LINKS.map((link) => (
                 <a
@@ -178,8 +275,8 @@ const Header: React.FC<{
                     e.preventDefault();
                     handleNav(link.id);
                   }}
-                  className={`border-b border-white/[0.06] py-3.5 text-sm font-medium ${
-                    activeSection === link.id ? "text-orange-400" : "text-white/70"
+                  className={`border-b border-black/[0.06] py-3.5 text-sm font-medium dark:border-white/[0.06] ${
+                    activeSection === link.id ? "text-orange-500 dark:text-orange-400" : "text-black/70 dark:text-white/70"
                   }`}
                 >
                   {link.label}
@@ -190,7 +287,7 @@ const Header: React.FC<{
               <Button
                 onClick={siginIn}
                 variant="outline"
-                className="h-10 w-full border-white/15 bg-transparent text-sm text-white hover:bg-white/10 hover:text-white"
+                className="h-10 w-full border-black/15 bg-transparent text-sm text-[#1C1917] hover:bg-black/5 hover:text-[#1C1917] dark:border-white/15 dark:text-white dark:hover:bg-white/10 dark:hover:text-white"
               >
                 Sign in
               </Button>
@@ -229,28 +326,28 @@ const AudienceCard: React.FC<AudienceCardProps> = ({
   const accentClasses =
     accent === "amber"
       ? {
-          chip: "bg-orange-500/10 text-orange-400 border-orange-500/20",
+          chip: "bg-orange-500/10 text-orange-600 border-orange-500/20 dark:text-orange-400",
           ring: "group-hover:border-orange-500/30",
           node: "bg-orange-500",
           glow: "group-hover:shadow-orange-500/10",
-          check: "text-orange-400",
+          check: "text-orange-600 dark:text-orange-400",
         }
       : {
-          chip: "bg-teal-500/10 text-teal-400 border-teal-500/20",
+          chip: "bg-teal-500/10 text-teal-600 border-teal-500/20 dark:text-teal-400",
           ring: "group-hover:border-teal-500/30",
           node: "bg-teal-400",
           glow: "group-hover:shadow-teal-500/10",
-          check: "text-teal-400",
+          check: "text-teal-600 dark:text-teal-400",
         };
 
   return (
     <div className="relative flex flex-col">
       <div
-        className={`absolute -top-[47px] left-1/2 hidden h-3 w-3 -translate-x-1/2 rounded-full ring-4 ring-[#1C1917] md:block ${accentClasses.node}`}
+        className={`absolute -top-[47px] left-1/2 hidden h-3 w-3 -translate-x-1/2 rounded-full ring-4 ring-[#FDF6EC] dark:ring-[#1C1917] md:block ${accentClasses.node}`}
       />
 
       <div
-        className={`group relative flex flex-1 flex-col rounded-2xl border border-white/10 bg-white/[0.03] p-6 shadow-xl shadow-transparent transition-all duration-300 hover:-translate-y-1 ${accentClasses.ring} ${accentClasses.glow}`}
+        className={`group relative flex flex-1 flex-col rounded-2xl border border-black/10 bg-black/[0.03] p-6 shadow-xl shadow-transparent transition-all duration-300 hover:-translate-y-1 dark:border-white/10 dark:bg-white/[0.03] ${accentClasses.ring} ${accentClasses.glow}`}
       >
         <div className="flex items-center justify-between">
           <div
@@ -258,24 +355,24 @@ const AudienceCard: React.FC<AudienceCardProps> = ({
           >
             <Icon className="h-5 w-5" />
           </div>
-          <span className="font-mono text-xs text-white/25">{step}</span>
+          <span className="font-mono text-xs text-black/25 dark:text-white/25">{step}</span>
         </div>
 
-        <p className="mt-5 text-[11px] font-mono uppercase tracking-[0.15em] text-white/40">
+        <p className="mt-5 text-[11px] font-mono uppercase tracking-[0.15em] text-black/40 dark:text-white/40">
           {eyebrow}
         </p>
-        <h3 className="mt-1.5 text-xl font-bold text-white tracking-tight">
+        <h3 className="mt-1.5 text-xl font-bold text-[#1C1917] tracking-tight dark:text-white">
           {title}
         </h3>
-        <p className="mt-2 text-sm leading-relaxed text-white/55">
+        <p className="mt-2 text-sm leading-relaxed text-black/55 dark:text-white/55">
           {description}
         </p>
 
-        <ul className="mt-4 space-y-2 border-t border-white/10 pt-4">
+        <ul className="mt-4 space-y-2 border-t border-black/10 pt-4 dark:border-white/10">
           {features.map((feature) => (
             <li
               key={feature}
-              className="flex items-start gap-2 text-xs text-white/50"
+              className="flex items-start gap-2 text-xs text-black/50 dark:text-white/50"
             >
               <CheckCircle2
                 className={`mt-0.5 h-3.5 w-3.5 shrink-0 ${accentClasses.check}`}
@@ -300,9 +397,9 @@ const TRAFFIC_META: Record<
   TrafficLevel,
   { label: string; bars: number; color: string; text: string }
 > = {
-  low: { label: "Low traffic", bars: 1, color: "bg-teal-400", text: "text-teal-400" },
-  medium: { label: "Moderate", bars: 2, color: "bg-orange-400", text: "text-orange-400" },
-  high: { label: "Busy", bars: 3, color: "bg-red-400", text: "text-red-400" },
+  low: { label: "Low traffic", bars: 1, color: "bg-teal-400", text: "text-teal-600 dark:text-teal-400" },
+  medium: { label: "Moderate", bars: 2, color: "bg-orange-400", text: "text-orange-600 dark:text-orange-400" },
+  high: { label: "Busy", bars: 3, color: "bg-red-400", text: "text-red-600 dark:text-red-400" },
 };
 
 const TrafficSignal: React.FC<{ level: TrafficLevel }> = ({ level }) => {
@@ -315,7 +412,7 @@ const TrafficSignal: React.FC<{ level: TrafficLevel }> = ({ level }) => {
           <span
             key={i}
             className={`w-1 rounded-sm transition-colors ${
-              i < meta.bars ? meta.color : "bg-white/10"
+              i < meta.bars ? meta.color : "bg-black/10 dark:bg-white/10"
             }`}
             style={{ height: `${6 + i * 4}px` }}
           />
@@ -348,28 +445,28 @@ const StationRow: React.FC<StationRowProps> = ({
     className={`flex items-center justify-between rounded-xl border px-4 py-3 transition-colors ${
       recommended
         ? "border-teal-500/30 bg-teal-500/[0.06]"
-        : "border-white/10 bg-white/[0.02]"
+        : "border-black/10 bg-black/[0.02] dark:border-white/10 dark:bg-white/[0.02]"
     }`}
   >
     <div className="flex items-center gap-3">
       <div
         className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg ${
-          recommended ? "bg-teal-500/15" : "bg-white/[0.06]"
+          recommended ? "bg-teal-500/15" : "bg-black/[0.06] dark:bg-white/[0.06]"
         }`}
       >
-        <Fuel className={`h-4 w-4 ${recommended ? "text-teal-400" : "text-white/40"}`} />
+        <Fuel className={`h-4 w-4 ${recommended ? "text-teal-600 dark:text-teal-400" : "text-black/40 dark:text-white/40"}`} />
       </div>
       <div>
         <div className="flex items-center gap-1.5">
-          <span className="text-sm font-semibold text-white">{name}</span>
+          <span className="text-sm font-semibold text-[#1C1917] dark:text-white">{name}</span>
           {recommended && (
-            <span className="flex items-center gap-1 rounded-full bg-teal-500/15 px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-wide text-teal-400">
+            <span className="flex items-center gap-1 rounded-full bg-teal-500/15 px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-wide text-teal-600 dark:text-teal-400">
               <Sparkles className="h-2.5 w-2.5" />
               Best pick
             </span>
           )}
         </div>
-        <div className="mt-0.5 flex items-center gap-1 text-[11px] text-white/40">
+        <div className="mt-0.5 flex items-center gap-1 text-[11px] text-black/40 dark:text-white/40">
           <MapPin className="h-3 w-3" />
           {distance} away · {wait} wait
         </div>
@@ -395,7 +492,7 @@ const FaqItem: React.FC<{
   onToggle: () => void;
   id: string;
 }> = ({ question, answer, isOpen, onToggle, id }) => (
-  <div className="border-b border-white/10 py-1">
+  <div className="border-b border-black/10 py-1 dark:border-white/10">
     <h3>
       <button
         type="button"
@@ -403,11 +500,11 @@ const FaqItem: React.FC<{
         aria-expanded={isOpen}
         aria-controls={`${id}-panel`}
         id={`${id}-trigger`}
-        className="flex w-full items-center justify-between gap-4 py-4 text-left text-sm font-semibold text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 md:text-base"
+        className="flex w-full items-center justify-between gap-4 py-4 text-left text-sm font-semibold text-[#1C1917] focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 dark:text-white md:text-base"
       >
         {question}
         <ChevronDown
-          className={`h-4 w-4 shrink-0 text-white/40 transition-transform duration-200 ${
+          className={`h-4 w-4 shrink-0 text-black/40 transition-transform duration-200 dark:text-white/40 ${
             isOpen ? "rotate-180" : ""
           }`}
         />
@@ -422,7 +519,7 @@ const FaqItem: React.FC<{
       }`}
     >
       <div className="min-h-0 overflow-hidden">
-        <p className="pr-8 text-sm leading-relaxed text-white/55">{answer}</p>
+        <p className="pr-8 text-sm leading-relaxed text-black/55 dark:text-white/55">{answer}</p>
       </div>
     </div>
   </div>
@@ -501,7 +598,7 @@ export default function LandingPage() {
  
 
   return (
-    <div className="min-h-screen bg-[#1C1917] text-white overflow-x-hidden [scroll-behavior:smooth]">
+    <div className="min-h-screen bg-[#FDF6EC] text-[#1C1917] dark:bg-[#1C1917] dark:text-white overflow-x-hidden [scroll-behavior:smooth]">
       <Header activeSection={activeSection} onNavigate={handleNavigate}  siginIn={()=> router.push("/auth/login")}/>
 
       <main id="main">
@@ -512,7 +609,7 @@ export default function LandingPage() {
           <div className="pointer-events-none absolute left-1/2 top-0 h-[500px] w-[500px] -translate-x-1/2 rounded-full bg-orange-500/10 blur-[120px]" />
 
           <div className="relative mx-auto max-w-3xl text-center">
-            <div className="mx-auto inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-[11px] font-mono text-white/50">
+            <div className="mx-auto inline-flex items-center gap-1.5 rounded-full border border-black/10 bg-black/[0.04] px-3 py-1 text-[11px] font-mono text-black/50 dark:border-white/10 dark:bg-white/[0.04] dark:text-white/50">
               <span className="h-1.5 w-1.5 rounded-full bg-orange-500" />
               Live across Adama fuel stations
             </div>
@@ -521,42 +618,42 @@ export default function LandingPage() {
               One route from
               <span className="text-orange-500"> request </span>
               to
-              <span className="text-teal-400"> pump</span>.
+              <span className="text-teal-500 dark:text-teal-400"> pump</span>.
             </h1>
 
-            <p className="mx-auto mt-5 max-w-xl text-base text-white/55 md:text-lg">
+            <p className="mx-auto mt-5 max-w-xl text-base text-black/55 dark:text-white/55 md:text-lg">
               FuelFlow connects drivers, fleet managers, and fuel stations on a
               single platform — request, approve, and dispense fuel without
               paperwork.
             </p>
 
             <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
-              <Button className="h-11 gap-2 bg-orange-600 px-6 text-sm font-semibold hover:bg-orange-700">
+              <Button className="h-11 gap-2 bg-orange-600 px-6 text-sm font-semibold text-white hover:bg-orange-700">
                 Get the driver app
                 <ArrowRight className="h-4 w-4" />
               </Button>
               <Button
                 variant="outline"
                 onClick={() => router.push("/auth/login")}
-                className="h-11 gap-2 border-white/15 bg-transparent px-6 text-sm text-white hover:bg-white/10 hover:text-white"
+                className="h-11 gap-2 border-black/15 bg-transparent px-6 text-sm text-[#1C1917] hover:bg-black/5 hover:text-[#1C1917] dark:border-white/15 dark:text-white dark:hover:bg-white/10 dark:hover:text-white"
               >
                 Access your dashboard
               </Button>
             </div>
           </div>
 
-          <div className="relative mx-auto mt-16 grid max-w-2xl grid-cols-3 divide-x divide-white/10 text-center">
+          <div className="relative mx-auto mt-16 grid max-w-2xl grid-cols-3 divide-x divide-black/10 text-center dark:divide-white/10">
             <div>
-              <div className="font-mono text-2xl font-bold text-white md:text-3xl">240+</div>
-              <div className="mt-1 text-[11px] text-white/40">Stations connected</div>
+              <div className="font-mono text-2xl font-bold text-[#1C1917] dark:text-white md:text-3xl">240+</div>
+              <div className="mt-1 text-[11px] text-black/40 dark:text-white/40">Stations connected</div>
             </div>
             <div>
-              <div className="font-mono text-2xl font-bold text-white md:text-3xl">18K</div>
-              <div className="mt-1 text-[11px] text-white/40">Drivers on the app</div>
+              <div className="font-mono text-2xl font-bold text-[#1C1917] dark:text-white md:text-3xl">18K</div>
+              <div className="mt-1 text-[11px] text-black/40 dark:text-white/40">Drivers on the app</div>
             </div>
             <div>
-              <div className="font-mono text-2xl font-bold text-white md:text-3xl">&lt;2min</div>
-              <div className="mt-1 text-[11px] text-white/40">Avg. request to approval</div>
+              <div className="font-mono text-2xl font-bold text-[#1C1917] dark:text-white md:text-3xl">&lt;2min</div>
+              <div className="mt-1 text-[11px] text-black/40 dark:text-white/40">Avg. request to approval</div>
             </div>
           </div>
         </section>
@@ -564,7 +661,7 @@ export default function LandingPage() {
         {/* =====================================================
             PRODUCT PREVIEW
         ===================================================== */}
-        <section id="product" className="scroll-mt-20 border-t border-white/10 px-6 py-20 md:px-12 md:py-28">
+        <section id="product" className="scroll-mt-20 border-t border-black/10 px-6 py-20 dark:border-white/10 md:px-12 md:py-28">
             <ProductPreview/>
 
         </section>
@@ -575,7 +672,7 @@ export default function LandingPage() {
         <section id="how-it-works" className="relative scroll-mt-20 px-6 pb-24 md:px-12">
           <div className="mx-auto max-w-5xl">
             <div className="mb-10 text-center">
-              <p className="text-[11px] font-mono uppercase tracking-[0.15em] text-white/40">
+              <p className="text-[11px] font-mono uppercase tracking-[0.15em] text-black/40 dark:text-white/40">
                 Built for the whole route
               </p>
               <h2 className="mt-2 text-2xl font-bold tracking-tight md:text-3xl">
@@ -588,7 +685,7 @@ export default function LandingPage() {
                 className="pointer-events-none absolute left-0 right-0 top-14 hidden h-px md:block"
                 style={{
                   backgroundImage:
-                    "repeating-linear-gradient(90deg, rgba(255,255,255,0.15) 0 10px, transparent 10px 20px)",
+                    "repeating-linear-gradient(90deg, rgba(120,113,108,0.35) 0 10px, transparent 10px 20px)",
                 }}
               />
 
@@ -608,21 +705,21 @@ export default function LandingPage() {
                   <div className="space-y-2.5">
                     <a
                       href="#"
-                      className="flex items-center gap-3 rounded-xl border border-white/10 bg-white/[0.04] px-4 py-2.5 transition-colors hover:bg-white/[0.08] focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500"
+                      className="flex items-center gap-3 rounded-xl border border-black/10 bg-black/[0.04] px-4 py-2.5 transition-colors hover:bg-black/[0.08] focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 dark:border-white/10 dark:bg-white/[0.04] dark:hover:bg-white/[0.08]"
                     >
                       <Apple className="h-5 w-5" />
                       <div className="leading-tight">
-                        <div className="text-[10px] text-white/40">Download on the</div>
+                        <div className="text-[10px] text-black/40 dark:text-white/40">Download on the</div>
                         <div className="text-sm font-semibold">App Store</div>
                       </div>
                     </a>
                     <a
                       href="#"
-                      className="flex items-center gap-3 rounded-xl border border-white/10 bg-white/[0.04] px-4 py-2.5 transition-colors hover:bg-white/[0.08] focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500"
+                      className="flex items-center gap-3 rounded-xl border border-black/10 bg-black/[0.04] px-4 py-2.5 transition-colors hover:bg-black/[0.08] focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 dark:border-white/10 dark:bg-white/[0.04] dark:hover:bg-white/[0.08]"
                     >
                       <PlayCircle className="h-5 w-5" />
                       <div className="leading-tight">
-                        <div className="text-[10px] text-white/40">Get it on</div>
+                        <div className="text-[10px] text-black/40 dark:text-white/40">Get it on</div>
                         <div className="text-sm font-semibold">Google Play</div>
                       </div>
                     </a>
@@ -643,7 +740,7 @@ export default function LandingPage() {
                 >
                   <Button
                     onClick={() => handleNavigate("contact")}
-                    className="w-full gap-2 bg-white text-[#1C1917] hover:bg-white/90"
+                    className="w-full gap-2 bg-[#1C1917] text-white hover:bg-[#1C1917]/90 dark:bg-white dark:text-[#1C1917] dark:hover:bg-white/90"
                   >
                     Open the console
                     <ArrowRight className="h-3.5 w-3.5" />
@@ -665,12 +762,12 @@ export default function LandingPage() {
                   <Button
                     variant="outline"
                     onClick={() => handleNavigate("contact")}
-                    className="w-full gap-2 border-white/15 bg-transparent hover:bg-white/10 hover:text-white"
+                    className="w-full gap-2 border-black/15 bg-transparent hover:bg-black/5 hover:text-[#1C1917] dark:border-white/15 dark:hover:bg-white/10 dark:hover:text-white"
                   >
                     Talk to our team
                     <ArrowRight className="h-3.5 w-3.5" />
                   </Button>
-                  <p className="mt-2 text-[11px] text-white/35">
+                  <p className="mt-2 text-[11px] text-black/35 dark:text-white/35">
                     Stations are onboarded by our team — no app install
                     needed once you're set up.
                   </p>
@@ -683,10 +780,10 @@ export default function LandingPage() {
         {/* =====================================================
             AI STATION FINDER
         ===================================================== */}
-        <section id="finder" className="scroll-mt-20 border-t border-white/10 px-6 py-20 md:px-12 md:py-28">
+        <section id="finder" className="scroll-mt-20 border-t border-black/10 px-6 py-20 dark:border-white/10 md:px-12 md:py-28">
           <div className="mx-auto grid max-w-5xl items-center gap-12 md:grid-cols-2 md:gap-16">
             <div>
-              <div className="inline-flex items-center gap-1.5 rounded-full border border-teal-500/20 bg-teal-500/[0.06] px-3 py-1 text-[11px] font-mono text-teal-400">
+              <div className="inline-flex items-center gap-1.5 rounded-full border border-teal-500/20 bg-teal-500/[0.08] px-3 py-1 text-[11px] font-mono text-teal-600 dark:bg-teal-500/[0.06] dark:text-teal-400">
                 <Radar className="h-3 w-3" />
                 AI-powered
               </div>
@@ -697,28 +794,28 @@ export default function LandingPage() {
                 you even leave.
               </h2>
 
-              <p className="mt-4 text-sm leading-relaxed text-white/55 md:text-base">
+              <p className="mt-4 text-sm leading-relaxed text-black/55 dark:text-white/55 md:text-base">
                 FuelFlow reads live queue and dispensing data across the
                 network and points you to the station that'll actually get
                 you back on the road fastest — not just the nearest one.
               </p>
 
               <ul className="mt-6 space-y-3">
-                <li className="flex items-start gap-2.5 text-sm text-white/70">
-                  <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-teal-400" />
+                <li className="flex items-start gap-2.5 text-sm text-black/70 dark:text-white/70">
+                  <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-teal-600 dark:text-teal-400" />
                   Live congestion at every connected station, updated in real time
                 </li>
-                <li className="flex items-start gap-2.5 text-sm text-white/70">
-                  <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-teal-400" />
+                <li className="flex items-start gap-2.5 text-sm text-black/70 dark:text-white/70">
+                  <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-teal-600 dark:text-teal-400" />
                   Ranked by wait time and distance together, not distance alone
                 </li>
-                <li className="flex items-start gap-2.5 text-sm text-white/70">
-                  <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-teal-400" />
+                <li className="flex items-start gap-2.5 text-sm text-black/70 dark:text-white/70">
+                  <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-teal-600 dark:text-teal-400" />
                   One-tap navigation to the recommended pump
                 </li>
               </ul>
 
-              <Button className="mt-7 gap-2 bg-teal-600 hover:bg-teal-700">
+              <Button className="mt-7 gap-2 bg-teal-600 text-white hover:bg-teal-700">
                 <Navigation className="h-4 w-4" />
                 Find my nearest station
               </Button>
@@ -727,16 +824,16 @@ export default function LandingPage() {
             <div className="relative">
               <div className="pointer-events-none absolute -inset-6 rounded-3xl bg-teal-500/[0.06] blur-2xl" />
 
-              <div className="relative rounded-2xl border border-white/10 bg-white/[0.03] p-4 shadow-2xl">
+              <div className="relative rounded-2xl border border-black/10 bg-black/[0.03] p-4 shadow-2xl dark:border-white/10 dark:bg-white/[0.03]">
                 <div className="flex items-center justify-between px-1 pb-3">
-                  <div className="flex items-center gap-1.5 text-[11px] text-white/40">
+                  <div className="flex items-center gap-1.5 text-[11px] text-black/40 dark:text-white/40">
                     <span className="relative flex h-1.5 w-1.5">
                       <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-teal-400 opacity-75" />
                       <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-teal-400" />
                     </span>
                     Live near you
                   </div>
-                  <span className="font-mono text-[10px] text-white/30" aria-live="polite">
+                  <span className="font-mono text-[10px] text-black/30 dark:text-white/30" aria-live="polite">
                     updated {refreshedSecondsAgo}s ago
                   </span>
                 </div>
@@ -787,10 +884,10 @@ export default function LandingPage() {
         {/* =====================================================
             TRUST STRIP
         ===================================================== */}
-        <section className="border-t border-white/10 px-6 py-10 md:px-12">
-          <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-center gap-x-10 gap-y-4 text-xs text-white/40">
+        <section className="border-t border-black/10 px-6 py-10 dark:border-white/10 md:px-12">
+          <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-center gap-x-10 gap-y-4 text-xs text-black/40 dark:text-white/40">
             <div className="flex items-center gap-2">
-              <ShieldCheck className="h-4 w-4 text-teal-400" />
+              <ShieldCheck className="h-4 w-4 text-teal-600 dark:text-teal-400" />
               Verified fuel type & volume matching
             </div>
             <div className="flex items-center gap-2">
@@ -798,7 +895,7 @@ export default function LandingPage() {
               Full request-to-dispense history
             </div>
             <div className="flex items-center gap-2">
-              <CheckCircle2 className="h-4 w-4 text-teal-400" />
+              <CheckCircle2 className="h-4 w-4 text-teal-600 dark:text-teal-400" />
               No paperwork, no manual logs
             </div>
           </div>
@@ -807,10 +904,10 @@ export default function LandingPage() {
         {/* =====================================================
             FAQ
         ===================================================== */}
-        <section id="faq" className="scroll-mt-20 border-t border-white/10 px-6 py-20 md:px-12 md:py-28">
+        <section id="faq" className="scroll-mt-20 border-t border-black/10 px-6 py-20 dark:border-white/10 md:px-12 md:py-28">
           <div className="mx-auto max-w-2xl">
             <div className="mb-8 text-center">
-              <p className="text-[11px] font-mono uppercase tracking-[0.15em] text-white/40">
+              <p className="text-[11px] font-mono uppercase tracking-[0.15em] text-black/40 dark:text-white/40">
                 Questions
               </p>
               <h2 className="mt-2 text-2xl font-bold tracking-tight md:text-3xl">
@@ -842,7 +939,7 @@ export default function LandingPage() {
       {/* =====================================================
           FOOTER
       ===================================================== */}
-      <footer className="border-t border-white/10 px-6 py-14 md:px-12">
+      <footer className="border-t border-black/10 px-6 py-14 dark:border-white/10 md:px-12">
         <div className="mx-auto max-w-5xl">
           <div className="grid gap-10 md:grid-cols-[1.2fr_1fr_1fr_1fr]">
             <div>
@@ -852,29 +949,29 @@ export default function LandingPage() {
                 </div>
                 <span className="text-sm font-bold tracking-tight">FuelConnect</span>
               </div>
-              <p className="mt-3 max-w-xs text-xs leading-relaxed text-white/40">
+              <p className="mt-3 max-w-xs text-xs leading-relaxed text-black/40 dark:text-white/40">
                 One route from request to pump — built for Oromia's fuel
                 network.
               </p>
             </div>
 
             <div>
-              <p className="text-[11px] font-semibold uppercase tracking-wide text-white/40">
+              <p className="text-[11px] font-semibold uppercase tracking-wide text-black/40 dark:text-white/40">
                 Product
               </p>
-              <ul className="mt-3 space-y-2.5 text-xs text-white/55">
+              <ul className="mt-3 space-y-2.5 text-xs text-black/55 dark:text-white/55">
                 <li>
-                  <a href="#product" onClick={(e) => { e.preventDefault(); handleNavigate("product"); }} className="hover:text-white">
+                  <a href="#product" onClick={(e) => { e.preventDefault(); handleNavigate("product"); }} className="hover:text-[#1C1917] dark:hover:text-white">
                     Overview
                   </a>
                 </li>
                 <li>
-                  <a href="#finder" onClick={(e) => { e.preventDefault(); handleNavigate("finder"); }} className="hover:text-white">
+                  <a href="#finder" onClick={(e) => { e.preventDefault(); handleNavigate("finder"); }} className="hover:text-[#1C1917] dark:hover:text-white">
                     AI station finder
                   </a>
                 </li>
                 <li>
-                  <a href="#how-it-works" onClick={(e) => { e.preventDefault(); handleNavigate("how-it-works"); }} className="hover:text-white">
+                  <a href="#how-it-works" onClick={(e) => { e.preventDefault(); handleNavigate("how-it-works"); }} className="hover:text-[#1C1917] dark:hover:text-white">
                     How it works
                   </a>
                 </li>
@@ -882,22 +979,22 @@ export default function LandingPage() {
             </div>
 
             <div>
-              <p className="text-[11px] font-semibold uppercase tracking-wide text-white/40">
+              <p className="text-[11px] font-semibold uppercase tracking-wide text-black/40 dark:text-white/40">
                 Company
               </p>
-              <ul className="mt-3 space-y-2.5 text-xs text-white/55">
+              <ul className="mt-3 space-y-2.5 text-xs text-black/55 dark:text-white/55">
                 <li>
-                  <a href="#testimonials" onClick={(e) => { e.preventDefault(); handleNavigate("testimonials"); }} className="hover:text-white">
+                  <a href="#testimonials" onClick={(e) => { e.preventDefault(); handleNavigate("testimonials"); }} className="hover:text-[#1C1917] dark:hover:text-white">
                     Customers
                   </a>
                 </li>
                 <li>
-                  <a href="#faq" onClick={(e) => { e.preventDefault(); handleNavigate("faq"); }} className="hover:text-white">
+                  <a href="#faq" onClick={(e) => { e.preventDefault(); handleNavigate("faq"); }} className="hover:text-[#1C1917] dark:hover:text-white">
                     FAQ
                   </a>
                 </li>
                 <li>
-                  <a href="#contact" onClick={(e) => { e.preventDefault(); handleNavigate("contact"); }} className="hover:text-white">
+                  <a href="#contact" onClick={(e) => { e.preventDefault(); handleNavigate("contact"); }} className="hover:text-[#1C1917] dark:hover:text-white">
                     Contact
                   </a>
                 </li>
@@ -905,17 +1002,17 @@ export default function LandingPage() {
             </div>
 
             <div>
-              <p className="text-[11px] font-semibold uppercase tracking-wide text-white/40">
+              <p className="text-[11px] font-semibold uppercase tracking-wide text-black/40 dark:text-white/40">
                 Legal
               </p>
-              <ul className="mt-3 space-y-2.5 text-xs text-white/55">
+              <ul className="mt-3 space-y-2.5 text-xs text-black/55 dark:text-white/55">
                 <li>
-                  <a href="#" className="hover:text-white">
+                  <a href="#" className="hover:text-[#1C1917] dark:hover:text-white">
                     Privacy policy
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-white">
+                  <a href="#" className="hover:text-[#1C1917] dark:hover:text-white">
                     Terms of service
                   </a>
                 </li>
@@ -923,14 +1020,14 @@ export default function LandingPage() {
             </div>
           </div>
 
-          <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-white/10 pt-6 sm:flex-row">
-            <p className="text-xs text-white/30">
+          <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-black/10 pt-6 dark:border-white/10 sm:flex-row">
+            <p className="text-xs text-black/30 dark:text-white/30">
               © {new Date().getFullYear()} FuelFlow. Built for Oromia's fuel network.
             </p>
             <a
               href="#hero"
               onClick={(e) => { e.preventDefault(); handleNavigate("hero"); }}
-              className="flex items-center gap-1 text-xs text-white/40 hover:text-white"
+              className="flex items-center gap-1 text-xs text-black/40 hover:text-[#1C1917] dark:text-white/40 dark:hover:text-white"
             >
               Back to top
               <ArrowUpRight className="h-3 w-3" />

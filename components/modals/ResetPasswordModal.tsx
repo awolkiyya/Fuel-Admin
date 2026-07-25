@@ -15,7 +15,7 @@ type Props = {
   onClose: () => void
   user: AuthUser | null
   onSubmit: (userId: string, password: string) => Promise<void> | void
-  loading?: boolean
+  isLoading?: boolean
 }
 
 /* =========================
@@ -40,7 +40,7 @@ export function ResetPasswordModal({
   onClose,
   user,
   onSubmit,
-  loading = false,
+  isLoading = false,
 }: Props) {
   const [password, setPassword] = useState("")
   const [error, setError] = useState<string | null>(null)
@@ -156,10 +156,10 @@ export function ResetPasswordModal({
         {/* ================= SUBMIT ================= */}
         <Button
           className="w-full"
-          disabled={!isValid || loading}
+          disabled={!isValid || isLoading}
           onClick={handleSubmit}
         >
-          {loading ? "Updating..." : "Reset Password"}
+          {isLoading ? "Updating..." : "Reset Password"}
         </Button>
 
       </div>
