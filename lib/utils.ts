@@ -275,3 +275,47 @@ export const reportTypeToTimeframes: Record<string, string[]> = {
 };
 
 
+
+
+import { CheckCircle2, Clock3, AlertTriangle } from "lucide-react"
+
+export function money(n: number) {
+  return `Br ${n.toLocaleString("en-US", { maximumFractionDigits: 0 })}`
+}
+
+export function liters(n: number) {
+  return `${n.toLocaleString("en-US")} L`
+}
+
+export function fmtDate(iso?: string | null) {
+  if (!iso) return "—"
+  const d = new Date(iso)
+  return d.toLocaleDateString("en-US", { month: "short", day: "numeric" })
+}
+
+export function fmtTime(iso?: string | null) {
+  if (!iso) return "—"
+  const d = new Date(iso)
+  return d.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" })
+}
+
+export const paymentMeta: Record<
+  string,
+  { label: string; color: string; bg: string; Icon: any }
+> = {
+  PAID: { label: "Paid", color: "var(--green)", bg: "var(--green-bg)", Icon: CheckCircle2 },
+  PARTIAL: { label: "Partial", color: "var(--amber-dark)", bg: "var(--amber-bg)", Icon: Clock3 },
+  UNPAID: { label: "Unpaid", color: "var(--red)", bg: "var(--red-bg)", Icon: AlertTriangle },
+}
+
+export function getPaymentMeta(status?: string) {
+  const key = (status ?? "").toUpperCase()
+  return (
+    paymentMeta[key] ?? {
+      label: status ?? "Unknown",
+      color: "var(--navy)",
+      bg: "#EEF1F5",
+      Icon: Clock3,
+    }
+  )
+}

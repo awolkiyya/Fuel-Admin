@@ -98,7 +98,7 @@ async getCameras(params?: {
         `/cameras/${id}/test`
       );
 
-      return res.data.data;
+      return res.data;
     } catch (error) {
       throw formatApiError(error);
     }

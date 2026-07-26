@@ -2,8 +2,7 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
 
-  output: "standalone",
-
+  output:"standalone",
 
   async rewrites() {
 
@@ -11,10 +10,17 @@ const nextConfig: NextConfig = {
 
 
     return [
+
       {
-        source: "/api/:path*",
-        destination: `${base}/api/:path*`,
+        source:"/api/cameras/:id/stream",
+        destination:"/api/cameras/:id/stream",
       },
+
+      {
+        source:"/api/:path*",
+        destination:`${base}/api/:path*`,
+      },
+
     ];
   },
 };

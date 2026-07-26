@@ -8,8 +8,8 @@ import {
 
 import { toast } from "sonner"
 import { pumpService } from "@/services/pump.service"
-import { Pump } from "@/types/pump.types"
 import { ListResponse } from "@/types/api"
+import { Dispenser } from "@/types/pump.types"
 
 /* ---------------------------
    KEYS (SCOPED BY STATION)
@@ -24,7 +24,7 @@ const pumpKeys = {
    GET PUMPS (STATION SAFE)
 ----------------------------*/
 export const usePumps = (stationId?: string) => {
-  return useQuery<ListResponse<Pump>>({
+  return useQuery<ListResponse<Dispenser>>({
     queryKey: stationId
       ? pumpKeys.byStation(stationId)
       : pumpKeys.all,
@@ -97,7 +97,7 @@ export const useTogglePumpStatus = (stationId?: string) => {
   
             return {
               ...old,
-              data: old.data.map((p: Pump) =>
+              data: old.data.map((p: Dispenser) =>
                 p.id === pumpId
                   ? {
                       ...p,
@@ -166,7 +166,7 @@ export const useToggleNozzle = (stationId?: string) => {
         queryKey: pumpKeys.byStation(stationId),
       })
 
-      const previous = qc.getQueryData<Pump[]>(
+      const previous = qc.getQueryData<Dispenser[]>(
         pumpKeys.byStation(stationId)
       )
 
@@ -174,7 +174,7 @@ export const useToggleNozzle = (stationId?: string) => {
         pumpKeys.byStation(stationId),
         (old: any) => ({
           ...old,
-          data: old.data.map((p: Pump) =>
+          data: old.data.map((p: Dispenser) =>
             p.id === pumpId
               ? {
                   ...p,

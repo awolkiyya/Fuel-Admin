@@ -1,80 +1,255 @@
-import { QueueZone } from "./station";
-
 /* ================= ENUMS ================= */
-export type CameraStatus = "online" | "offline" | "testing";
 
-export type CameraType = "rtsp" | "http" | "webrtc";
+export type CameraStatus =
+  | "ONLINE"
+  | "OFFLINE"
+  | "ERROR"
+  | "DISCONNECTED";
+
+
+export type CameraProtocol =
+  | "RTSP"
+  | "HTTP"
+  | "HTTPS"
+  | "WEBRTC";
+
+
+export type CameraAuthType =
+  | "NONE"
+  | "BASIC"
+  | "DIGEST"
+  | "TOKEN";
+
+
+
+/* ================= AI TYPES ================= */
+
+export interface QueueZone {
+
+  x: number;
+
+  y: number;
+
+  width: number;
+
+  height: number;
+
+}
+
+
+export interface CameraThresholds {
+
+  personConfidence?:number;
+
+  faceConfidence?:number;
+
+  vehicleConfidence?:number;
+
+}
+
+
 
 /* ================= BASE MODEL (API RESPONSE) ================= */
+
 export interface Camera {
-  id: string;
 
-  stationId: string;
-  stationName?: string;
+  id:string;
 
-  name: string;
 
-  streamUrl: string;
-  type: CameraType;
+  // ================= RELATION =================
 
-  username?: string;
-  password?: string;
+  stationId:string;
 
-  ipAddress?: string;
-  port?: number;
+  stationName?:string;
 
-  location?: string;
-  latitude?: number;
-  longitude?: number;
 
-  status: CameraStatus;
-  lastSeenAt?: string;
-  lastCheckedAt?: string;
 
-  resolution?: string;
-  fps?: number;
-  codec?: string;
+  // ================= BASIC =================
 
-  aiEnabled: boolean;
-  isActive: boolean;
+  name:string;
 
-  metadata?: Record<string, unknown>;
 
-  createdAt: string;
-  updatedAt: string;
+
+  // ================= CONNECTION =================
+
+  protocol:CameraProtocol;
+
+  host:string;
+
+  port:number;
+
+  // Prisma field
+  path:string;
+
+
+
+  // ================= AUTH =================
+
+  authType:CameraAuthType;
+
+  username?:string;
+
+
+  /**
+   * Usually not returned.
+   * Only for admin debugging if needed.
+   */
+  passwordEncrypted?:string;
+
+
+
+  // ================= LOCATION =================
+
+  location?:string;
+
+  latitude?:number;
+
+  longitude?:number;
+
+
+
+  // ================= STATUS =================
+
+  status:CameraStatus;
+
+  lastSeenAt?:string;
+
+  lastCheckedAt?:string;
+
+
+
+  // ================= STREAM INFO =================
+
+  resolution?:string;
+
+  fps?:number;
+
+  codec?:string;
+
+
+
+  // ================= AI =================
+
+  aiEnabled:boolean;
+
+
+  queueZone?:QueueZone | null;
+
+
+  thresholds?:CameraThresholds | null;
+
+
+
+  // ================= CONTROL =================
+
+  isActive:boolean;
+
+
+
+  // ================= EXTRA =================
+
+  metadata?:Record<string,unknown>;
+
+
+
+  createdAt:string;
+
+  updatedAt:string;
+
 }
+
+
 
 /* ================= FORM DTO (UI USE) ================= */
+
 export interface CameraForm {
-  id?: string;
 
-  name: string;
-  stationId: string;
 
-  streamUrl: string;
+  id?:string;
 
-  type?: CameraType;
 
-  username?: string;
-  password?: string;
 
-  ipAddress?: string;
-  port?: number;
+  // ================= BASIC =================
 
-  location?: string;
+  name:string;
 
-  latitude?: number;
-  longitude?: number;
+  stationId:string;
 
-  resolution?: string;
-  fps?: number;
-  codec?: string;
 
-  aiEnabled?: boolean;
-  isActive?: boolean;
+
+  // ================= CONNECTION =================
+
+  protocol:CameraProtocol;
+
+  host:string;
+
+  port?:number;
+
+
+  /**
+   * UI field mapped to backend path
+   */
+  streamPath:string;
+
+
+
+  // ================= AUTH =================
+
+  authType?:CameraAuthType;
+
+  username?:string;
+
+  password?:string;
+
+
+
+  // ================= LOCATION =================
+
+  location?:string;
+
+  latitude?:number;
+
+  longitude?:number;
+
+
+
+  // ================= STREAM INFO =================
+
+  resolution?:string;
+
+  fps?:number;
+
+  codec?:string;
+
+
+
+  // ================= AI =================
+
+  aiEnabled?:boolean;
+
+
+  queueZone?:QueueZone;
+
+
+  thresholds?:CameraThresholds;
+
+
+
+  // ================= CONTROL =================
+
+  isActive?:boolean;
+
+
 }
 
-export type AiCameraResponse = {
-  queueZone: QueueZone | null
-  cameras: Camera[]
+
+
+/* ================= AI CAMERA RESPONSE ================= */
+
+export interface AiCameraResponse {
+
+  queueZone:QueueZone | null;
+
+  cameras:Camera[];
+
 }

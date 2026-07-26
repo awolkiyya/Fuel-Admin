@@ -40,6 +40,8 @@ export type SystemSettings = {
   // ⚙️ SYSTEM CONTROL
   // ==============================
   systemActive: boolean
+
+  priceControlMode: "FIXED" | "OVERRIDE";
 }
 
 /* ---------------------------------------

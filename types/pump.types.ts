@@ -1,21 +1,32 @@
-export type FuelType = "Petrol" | "Diesel"
+export type EquipmentStatus =
+  | "ACTIVE"
+  | "INACTIVE"
+  | "MAINTENANCE"
 
-export type NozzleStatus = "active" | "maintenance" | "offline"
-export type PumpStatus = "active" | "inactive" | "maintenance"
 
-/* -----------------------------
-   CORE API TYPES (aligned with DB)
-------------------------------*/
-export type Nozzle = {
-  id: string
-  number: number
-  fuelType: FuelType
-  status: NozzleStatus
+export interface Nozzle {
+
+  id:string
+  number:number
+
+  fuelType:{
+    id:string
+    name:string
+  }
+
+  status:EquipmentStatus
+
 }
 
-export type Pump = {
-  id: string
-  number: number
-  status: PumpStatus
-  nozzles: Nozzle[]
+
+export interface Dispenser {
+
+  id:string
+
+  number:number
+
+  status:EquipmentStatus
+
+  nozzles:Nozzle[]
+
 }

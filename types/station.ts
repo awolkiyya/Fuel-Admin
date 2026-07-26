@@ -25,10 +25,29 @@ export interface FuelInventory {
 export interface StationCamera {
   id: string
   name: string
+
+  protocol: "RTSP" | "HTTP" | "WEBRTC"
+  host: string
+  port: number
+  path: string
+
+  // Computed by backend
   streamUrl: string
-  type: "rtsp" | "http" | "webrtc" | "mobile_mock"
+
+  authType: "NONE" | "BASIC" | "DIGEST"
+  username?: string | null
+
   location?: string | null
+  latitude?: number | null
+  longitude?: number | null
+
   status: "online" | "offline" | "testing"
+
+  aiEnabled: boolean
+
+  resolution?: string | null
+  fps?: number | null
+  codec?: string | null
 }
 
 /* =========================
@@ -123,7 +142,7 @@ export type QueueZone = {
 
 export type StaffStatus =
   | "ACTIVE"
-  | "OFF"
+  | "BLOCKED"
   | "SUSPENDED"
   | "INACTIVE"
 

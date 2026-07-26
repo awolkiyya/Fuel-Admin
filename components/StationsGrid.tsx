@@ -30,6 +30,8 @@ import {
   Copy,
   AlertTriangle,
   Info,
+  CameraIcon,
+  Cpu,
 } from "lucide-react"
 
 import {
@@ -331,17 +333,17 @@ export function StationsGrid({
                      </DropdownMenuItem>
 
                     {/* =========================
-                        🎥 CAMERA MODAL
+                        🎥 CAMERA PAGE
                     ========================= */}
-                    <CameraModal
-                      station={station}
-                      trigger={
-                        <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-                          <Camera className="w-4 h-4 mr-2" />
-                          Cameras
-                        </DropdownMenuItem>
+
+                    <DropdownMenuItem
+                      onClick={() =>
+                        router.push(`/dashboard/stations/${station.id}/cameras`)
                       }
-                    />
+                    >
+                      <Camera className="w-4 h-4 mr-2" />
+                      Cameras
+                    </DropdownMenuItem>
 
                     {/* MAP */}
                     <StationMapModal
@@ -496,87 +498,6 @@ export function StationsGrid({
 // }
 
 
-type Camera = {
-  id?: string
-  name: string
-  streamUrl: string
-  type: "rtsp" | "http" | "webrtc" | "mobile_mock"
-}
-
-type CameraProps = {
-  station: any
-  trigger: React.ReactNode
-}
-
-export function CameraModal({ station, trigger }: CameraProps) {
-  const [open, setOpen] = useState(false)
-
-  const cameras: Camera[] = station?.cameras ?? []
-
-  return (
-    <>
-      <div onClick={() => setOpen(true)}>
-        {trigger}
-      </div>
-
-      <BaseModal
-        open={open}
-        onOpenChange={setOpen}
-        title={`Cameras • ${station?.name ?? ""}`}
-      >
-        <div className="space-y-3">
-
-          {/* EMPTY STATE */}
-          {cameras.length === 0 && (
-            <div className="flex flex-col items-center justify-center py-8 text-center">
-              <Camera className="w-10 h-10 text-muted-foreground opacity-60" />
-              <p className="text-sm text-muted-foreground mt-2">
-                No cameras available
-              </p>
-            </div>
-          )}
-
-          {/* CAMERA LIST */}
-          {cameras.map((cam, i) => (
-            <div
-              key={cam.id ?? i}
-              className="border rounded-lg p-3 space-y-2 bg-muted/30"
-            >
-
-              {/* HEADER */}
-              <div className="flex justify-between items-start">
-                <div>
-                  <div className="font-medium text-sm">
-                    {cam.name}
-                  </div>
-
-                  <div className="text-xs text-muted-foreground">
-                    {cam.type.toUpperCase()}
-                  </div>
-                </div>
-              </div>
-
-              {/* STREAM INFO */}
-              <div className="text-[11px] text-muted-foreground break-all">
-                {cam.streamUrl}
-              </div>
-
-              {/* LIVE BUTTON ONLY */}
-              <div className="pt-2">
-                <Button size="sm" className="w-full gap-2">
-                  <PlayCircle className="w-4 h-4" />
-                  Live View
-                </Button>
-              </div>
-
-            </div>
-          ))}
-
-        </div>
-      </BaseModal>
-    </>
-  )
-}
 
 
 

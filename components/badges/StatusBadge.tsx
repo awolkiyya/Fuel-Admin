@@ -6,9 +6,9 @@ import {
   AlertTriangle,
 } from "lucide-react";
 
-type BusinessLicenseStatus =
+export type BusinessLicenseStatus =
   | "PENDING"
-  | "APPROVED"
+  | "ACTIVE"
   | "REJECTED"
   | "EXPIRED";
 
@@ -22,14 +22,17 @@ export function StatusBadge({
     "default" | "secondary" | "destructive" | "outline"
   > = {
     PENDING: "secondary",
-    APPROVED: "default",
+    ACTIVE: "default",
     REJECTED: "destructive",
     EXPIRED: "outline",
   };
 
-  const iconMap = {
+  const iconMap: Record<
+    BusinessLicenseStatus,
+    React.ReactNode
+  > = {
     PENDING: <Clock className="h-3 w-3" />,
-    APPROVED: <CheckCircle className="h-3 w-3" />,
+    ACTIVE: <CheckCircle className="h-3 w-3" />,
     REJECTED: <XCircle className="h-3 w-3" />,
     EXPIRED: <AlertTriangle className="h-3 w-3" />,
   };

@@ -70,3 +70,37 @@ export const updateStaffPassword = async (params: {
 
   return data.data
 }
+
+export async function updateStaffProfile(data:{
+  stationId:string
+  userId:string
+  full_name:string
+  phone:string
+  email:string
+  gender:"MALE"|"FEMALE"
+}){
+
+
+const res =
+await api.patch(
+
+`/stations/${data.stationId}/staff/${data.userId}`,
+
+{
+
+full_name:data.full_name,
+
+phone:data.phone,
+
+email:data.email,
+
+gender:data.gender
+
+}
+
+)
+
+
+return res.data
+
+}

@@ -121,13 +121,6 @@ export const useUpdateFuelConfig = () => {
       });
 
       toast.success("Fuel configuration updated successfully");
-    },
-
-    onError: (err: any) => {
-      toast.error(
-        err?.response?.data?.message ||
-          "Failed to update fuel configuration"
-      );
-    },
+    }
   });
 };

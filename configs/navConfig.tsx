@@ -120,7 +120,7 @@ export const NAV_BY_ROLE: Record<UserRole, NavItem[]> = {
           url: "/dashboard/tanks",
         },
         {
-          title: "Pumps & Nozzles",
+          title: "Dispenser & Nozzles",
           url: "/dashboard/pumps",
         },
         {

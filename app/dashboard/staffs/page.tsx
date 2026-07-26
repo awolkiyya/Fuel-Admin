@@ -54,6 +54,7 @@ import { StaffStatus, StationStaff } from "@/types/station"
 import {
   useCreateStaff,
   useStationStaff,
+  useUpdateStaff,
   useUpdateStaffStatus,
 } from "@/hooks/station/useStaffs.hook"
 
@@ -88,10 +89,10 @@ function StatusBadge({ status }: { status: StaffStatus }) {
       dot: "bg-teal-500",
       label: "On duty",
     },
-    OFF: {
+    BLOCKED: {
       className: "bg-gray-100 text-gray-600 border border-gray-200",
       dot: "bg-gray-400",
-      label: "Off shift",
+      label: "Blocked",
     },
     SUSPENDED: {
       className: "bg-red-50 text-red-700 border border-red-200",
@@ -101,10 +102,10 @@ function StatusBadge({ status }: { status: StaffStatus }) {
     INACTIVE:{
       className: "bg-red-50 text-red-700 border border-red-200",
       dot: "bg-red-500",
-      label: "Suspended",
+      label: "Off shift",
     },
   }
-  const { className, dot, label } = map[status] ?? map.OFF
+  const { className, dot, label } = map[status] ?? map.BLOCKED
   return (
     <span
       className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium ${className}`}
@@ -485,6 +486,9 @@ export default function StationStaffPage() {
   const [editOpen, setEditOpen] = useState(false)
   const [editTarget, setEditTarget] = useState<StationStaff | null>(null)
 
+  const updateStaff =
+  useUpdateStaff(stationId ?? undefined)
+
   const toast = useToast()
 
   if (!stationId) {
@@ -517,9 +521,9 @@ export default function StationStaffPage() {
   const handleStatusChange = (id: string, status: StaffStatus) => {
     const labels: Record<StaffStatus, string> = {
       ACTIVE: "marked on duty",
-      OFF: "set to off shift",
+      INACTIVE: "set to off shift",
       SUSPENDED: "suspended",
-      INACTIVE:"",
+      BLOCKED:"blocked",
     }
     updateStatus.mutate(
       { stationId, userId: id, status },
@@ -540,6 +544,21 @@ export default function StationStaffPage() {
     gender: "MALE" | "FEMALE"
   }) => {
     // Wire this to your useUpdateStaffDetails hook when ready
+    updateStaff.mutate({
+
+      stationId,
+      
+      userId:data.id,
+      
+      full_name:data.full_name,
+      
+      phone:data.phone,
+      
+      email:data.email,
+      
+      gender:data.gender
+      
+      })
     console.log("UPDATE STAFF:", data)
     toast.show("Changes saved")
   }
@@ -549,7 +568,7 @@ export default function StationStaffPage() {
   const FILTERS: { label: string; value: FilterType }[] = [
     { label: "All", value: "ALL" },
     { label: "On duty", value: "ACTIVE" },
-    { label: "Off shift", value: "OFF" },
+    { label: "Off shift", value: "INACTIVE" },
     { label: "Suspended", value: "SUSPENDED" },
   ]
 
@@ -573,7 +592,7 @@ export default function StationStaffPage() {
       {/* STATS */}
       <div className="flex gap-3">
         <StatCard icon={Users} count={countBy("ACTIVE")} label="On duty" iconClass="text-teal-600" />
-        <StatCard icon={Moon} count={countBy("OFF")} label="Off shift" iconClass="text-gray-400" />
+        <StatCard icon={Moon} count={countBy("INACTIVE")} label="Off shift" iconClass="text-gray-400" />
         <StatCard icon={Ban} count={countBy("SUSPENDED")} label="Suspended" iconClass="text-red-500" />
         <StatCard icon={Users} count={staff.length} label="Total staff" iconClass="text-blue-500" />
       </div>
@@ -720,9 +739,9 @@ export default function StationStaffPage() {
                               Set on duty
                             </DropdownMenuItem>
                           )}
-                          {s.status !== "OFF" && (
+                          {s.status !== "INACTIVE" && (
                             <DropdownMenuItem
-                              onClick={() => handleStatusChange(s.id, "OFF")}
+                              onClick={() => handleStatusChange(s.id, "INACTIVE")}
                               className="gap-2"
                             >
                               <Moon className="w-3.5 h-3.5 text-gray-400" />

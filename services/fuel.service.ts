@@ -94,5 +94,5 @@ export const updateFuelConfig = async (
   stationId: string,
   payload: FuelConfigPayload
 ): Promise<void> => {
-  await api.patch(`/stations/${stationId}/fuel`, payload);
+  await api.patch(`/stations/${stationId}/fuel-config`, payload);
 };

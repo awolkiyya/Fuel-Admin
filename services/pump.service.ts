@@ -4,15 +4,15 @@ import { formatApiError } from "@/utils/apiError"
 /* ---------------------------------------
    TYPES (optional import if you have them)
 ----------------------------------------*/
-import { Pump } from "@/types/pump.types"
 import { ListResponse, SingleResponse } from "@/types/api"
+import { Dispenser } from "@/types/pump.types"
 
 export type AddNozzleDTO = {
-    stationId: string
-    pumpId: string
-    number: number
-    fuelType: string
-  }
+  stationId: string
+  pumpId: string
+  number: number
+  fuelTypeId: string
+}
 
 /* ---------------------------------------
    PUMP SERVICE
@@ -21,7 +21,7 @@ export const pumpService = {
   /* ---------------------------------------
      GET PUMPS (BY STATION)
   ----------------------------------------*/
-  async getPumps(stationId: string): Promise<ListResponse<Pump>> {
+  async getPumps(stationId: string): Promise<ListResponse<Dispenser>> {
     try {
       const { data } = await api.get(
         `/stations/${stationId}/pumps`
@@ -38,7 +38,7 @@ export const pumpService = {
   async createPump(payload: {
     stationId: string
     number: number
-  }): Promise<Pump> {
+  }): Promise<Dispenser> {
     try {
       const { data } = await api.post(
         `/stations/${payload.stationId}/pumps`,
@@ -56,7 +56,7 @@ export const pumpService = {
      TOGGLE PUMP STATUS
   ----------------------------------------*/
   async togglePumpStatus({id,stationId}:{id: string,stationId:string}
-    ): Promise<Pump> {
+    ): Promise<Dispenser> {
     try {
       const { data } = await api.patch(
         `/stations/${stationId}/pumps/${id}/toggle`

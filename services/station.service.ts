@@ -1,6 +1,7 @@
 import { api } from "@/lib/api"
 import { PaginatedResponse } from "@/types/api"
 import { FuelItem, Manager, Station, StationQuery } from "@/types/station"
+import { StationTransactionQuery, StationTransactionResource, StationTransactionSummaryResponse } from "@/types/station-transaction"
 import { formatApiError } from "@/utils/apiError"
 
 
@@ -30,6 +31,22 @@ export const stationService = {
       console.log(data);
       
       return data
+    } catch (error) {
+      throw formatApiError(error)
+    }
+  },
+
+  async getStationById(id: string): Promise<Station> {
+    try {
+      const { data } = await api.get<{
+        success: boolean
+        data: Station
+      }>(
+        `/stations/${id}`
+      )
+  
+      return data.data
+  
     } catch (error) {
       throw formatApiError(error)
     }
@@ -134,7 +151,214 @@ export const stationService = {
     } catch (error) {
       throw formatApiError(error)
     }
+  },
+
+    /* -----------------------------
+     STATION SETTINGS
+  ------------------------------ */
+
+  async getStationSettings(stationId: string) {
+    try {
+
+      const { data } = await api.get(
+        `/stations/${stationId}/settings`
+      )
+
+      return data
+
+    } catch (error) {
+      throw formatApiError(error)
+    }
+  },
+
+
+
+  async updateQueueSettings(
+    stationId:string,
+    payload:{
+      thresholdLow:number
+      thresholdMedium:number
+      thresholdHigh:number
+      thresholdCritical:number
+      maxQueueCapacity:number
+      queueZone?:any
+      minFuelRequestLiters?:number
+    }
+  ){
+
+    try {
+
+      const {data} =
+      await api.patch(
+        `/stations/${stationId}/settings/queue`,
+        payload
+      )
+
+      return data
+
+    } catch(error){
+
+      throw formatApiError(error)
+
+    }
+
+  },
+
+
+
+
+
+  /* -----------------------------
+     STATION TRAFFIC
+  ------------------------------ */
+
+
+  async getStationTraffic(
+    stationId:string
+  ){
+
+    try{
+
+      const {data} =
+      await api.get(
+        `/stations/${stationId}/traffic`
+      )
+
+      return data
+
+    }catch(error){
+
+      throw formatApiError(error)
+
+    }
+
+  },
+
+
+
+
+  async updateManualTraffic(
+    stationId:string,
+    payload:{
+      queueCount:number
+      congestionLevel:
+      "low" |
+      "medium" |
+      "high" |
+      "critical"
+    }
+  ){
+
+    try{
+
+      const {data} =
+      await api.patch(
+        `/stations/${stationId}/traffic/manual`,
+        payload
+      )
+
+      return data
+
+    }catch(error){
+
+      throw formatApiError(error)
+
+    }
+
+  },
+
+
+    /* -----------------------------
+     STATION TRANSACTIONS
+  ------------------------------ */
+
+
+  async getStationTransactions(
+    stationId: string,
+    params?: StationTransactionQuery
+  ) {
+
+    try {
+
+      const { data } =
+        await api.get<
+          PaginatedResponse<StationTransactionResource>
+        >(
+          `/stations/${stationId}/fuel-transactions`,
+          {
+            params
+          }
+        )
+
+
+      return data
+
+
+    } catch(error) {
+
+      throw formatApiError(error)
+
+    }
+
+  },
+
+
+
+
+  /* -----------------------------
+     GET SINGLE TRANSACTION
+  ------------------------------ */
+
+
+  async getStationTransactionById(
+    stationId:string,
+    transactionId:string
+  ){
+
+    try {
+
+      const {data} =
+        await api.get<{
+          success:boolean
+          data:StationTransactionResource
+        }>(
+          `/stations/${stationId}/fuel-transactions/${transactionId}`
+        )
+
+
+      return data
+
+
+    } catch(error){
+
+      throw formatApiError(error)
+
+    }
+
+  },
+
+
+  async getTransactionSummary(
+    stationId:string
+  ){
+  
+    try {
+  
+      const {data} =
+        await api.get<StationTransactionSummaryResponse>(
+          `/stations/${stationId}/fuel-transactions/summary`
+        )
+  
+      return data
+  
+    } catch(error){
+  
+      throw formatApiError(error)
+  
+    }
+  
   }
+
 }
 
 
