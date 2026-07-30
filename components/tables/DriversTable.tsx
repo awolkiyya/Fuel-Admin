@@ -25,6 +25,7 @@ import { TableSkeleton } from "@/components/tables/TableSkeleton"
 import { TableEmpty } from "./table-empty"
 import { queryClient } from "@/providers/query-client"
 import { getInitials } from "@/utils/getInitials"
+import { DriverUser } from "@/types/driver"
 
 /* -----------------------------
    TYPES
@@ -33,10 +34,10 @@ type DriverStatus = "ACTIVE" | "INACTIVE" | "SUSPENDED" | "BLOCKED"
 type RiskLevel = "low" | "medium" | "high"
 
 interface DriversTableProps {
-  data: any[]
+  data: DriverUser[]
   isLoading: boolean
   hasFilters?: boolean
-  onView?: (driver: any) => void
+  onView?: (driver: DriverUser) => void
 
 
 }
@@ -109,7 +110,7 @@ export function DriversTable({
 
         <TableBody>
           {data.length > 0 ? (
-            data.map((driver: any, index: number) => (
+            data.map((driver: DriverUser, index: number) => (
               <TableRow key={driver.id}>
                 <TableCell>{index + 1}</TableCell>
 
@@ -118,14 +119,14 @@ export function DriversTable({
                   <div className="flex items-center gap-3">
                     <Avatar className="h-8 w-8">
                       <AvatarFallback>
-                      {getInitials(driver.fullName)}
+                      {getInitials(driver.full_name)}
 
                       </AvatarFallback>
                     </Avatar>
 
                     <div>
                       <div className="font-medium">
-                        {driver.fullName}
+                        {driver.full_name}
                       </div>
                       <div className="text-xs text-muted-foreground">
                         {driver.phone}
@@ -145,8 +146,8 @@ export function DriversTable({
                 </TableCell>
 
                 <TableCell>
-                  <Badge variant={getRiskVariant(driver.riskLevel)}>
-                    {driver.riskLevel}
+                  <Badge variant={getRiskVariant(driver.riskSummary.level)}>
+                    {driver.riskSummary.level}
                   </Badge>
                 </TableCell>
 

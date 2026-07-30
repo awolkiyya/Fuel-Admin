@@ -37,7 +37,7 @@ export const BrowserFrame: React.FC<BrowserFrameProps> = ({
 
     <div
       className={`relative w-full ${isScreenshot ? "" : "p-4"}`}
-      style={{ aspectRatio: isScreenshot ? "16 / 10" : undefined }}
+      style={{ aspectRatio: isScreenshot ? "20 / 10" : undefined }}
     >
       {children}
     </div>

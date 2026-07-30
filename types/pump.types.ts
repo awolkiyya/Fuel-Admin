@@ -4,17 +4,37 @@ export type EquipmentStatus =
   | "MAINTENANCE"
 
 
+
 export interface Nozzle {
 
-  id:string
-  number:number
+  id: string;
 
-  fuelType:{
-    id:string
-    name:string
-  }
+  number: number;
 
-  status:EquipmentStatus
+
+  fuelType: {
+
+    id: string;
+
+    name: string;
+
+  };
+
+
+  status: EquipmentStatus;
+
+
+
+  // Parent dispenser
+  dispenser?: {
+
+    id: string;
+
+    number: number;
+
+    status: EquipmentStatus;
+
+  };
 
 }
 

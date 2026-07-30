@@ -10,31 +10,41 @@ export interface GetDriversParams {
   limit?: number
   search?: string
   status?: string
-  risk?: string
-  vehicleFilter?: "1" | "2+" | "all"
+  riskLevel?: string
+  vehicleFilter?: "single" | "multiple"
 }
 
 /* -----------------------------
-   DRIVER SERVICE (REAL API)
+   DRIVER SERVICE
 ------------------------------ */
 export const driverService = {
   /* -----------------------------
      GET DRIVERS
   ------------------------------ */
-  getDrivers: async (params: GetDriversParams):Promise< PaginatedResponse<DriverUser>> => {
-    const res = await api.get<
-      PaginatedResponse<DriverUser>
-    >("/drivers", {
+  getDrivers: async (
+    params: GetDriversParams = {}
+  ): Promise<PaginatedResponse<DriverUser>> => {
+    const res = await api.get<PaginatedResponse<DriverUser>>("/drivers", {
       params: {
         page: params.page ?? 1,
         limit: params.limit ?? 10,
         search: params.search || undefined,
         status: params.status || undefined,
-        risk: params.risk || undefined,
+        riskLevel: params.riskLevel || undefined,
         vehicleFilter: params.vehicleFilter || undefined,
       },
     })
 
+    return res.data
+  },
+
+  /* -----------------------------
+     GET DRIVER BY ID
+  ------------------------------ */
+  getDriverById: async (
+    id: string
+  ): Promise<SingleResponse<DriverUser>> => {
+    const res = await api.get<SingleResponse<DriverUser>>(`/drivers/${id}`)
     return res.data
   },
 }

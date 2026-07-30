@@ -108,7 +108,7 @@ function RequestCard({
   return (
     <Card
       className={cn(
-        "group border-l-4 rounded-md overflow-hidden transition-all duration-200 hover:shadow-md bg-white"
+        "group border-l-4 rounded-md overflow-hidden transition-all duration-200 hover:shadow-md "
       )}
     >
       <CardContent className="p-0">

@@ -7,7 +7,7 @@ export type BusinessLicenseStatus =
 
 export type BusinessLicenseRequestType =
   | "NEW"
-  | "RENEW";
+  | "RENEWAL";
 
 
 export interface BusinessLicenseUser {
@@ -48,6 +48,7 @@ export interface BusinessLicense {
   createdAt: string;
 
   updatedAt: string;
+  rejectionReason?:string;
 
 
   user?: BusinessLicenseUser;

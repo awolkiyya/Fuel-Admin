@@ -139,7 +139,7 @@ const Section: React.FC<SectionProps> = ({
   const [open, setOpen] = useState(defaultOpen);
 
   return (
-    <div className="rounded-xl border border-border overflow-hidden">
+    <div className="rounded-xl border border-border overflow-hidden ">
       <button
         type="button"
         onClick={() => setOpen((o) => !o)}
@@ -566,19 +566,63 @@ function ActionPanel({
       </div>
 
       <div className="grid grid-cols-2 gap-3">
-        <div className="flex items-center gap-2.5">
-          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-white/80 dark:bg-white/10 shadow-sm">
-            <Fuel className="h-4 w-4 text-amber-600 dark:text-amber-500" />
-          </div>
-          <div className="min-w-0">
-            <div className="text-[10px] text-muted-foreground leading-tight">
-              Nozzle No
-            </div>
-            <div className="text-sm font-semibold leading-tight truncate">
-              {request.nozzle?.number ?? "—"}
-            </div>
-          </div>
-        </div>
+      <div className="grid grid-cols-2 gap-3">
+  <div className="flex items-center gap-2.5">
+
+    <div className="
+      flex h-8 w-8 shrink-0
+      items-center justify-center
+      rounded-lg
+      bg-white/80
+      dark:bg-white/10
+      shadow-sm
+    ">
+      <Fuel className="
+        h-4 w-4
+        text-amber-600
+        dark:text-amber-500
+      " />
+    </div>
+
+
+    <div className="min-w-0">
+
+      <div className="
+        text-[10px]
+        text-muted-foreground
+        leading-tight
+      ">
+        Pump / Nozzle
+      </div>
+
+
+      <div className="
+        text-sm
+        font-semibold
+        leading-tight
+        truncate
+      ">
+        {request.nozzle
+          ? `D-${request.nozzle.dispenser?.number ?? "?"} / N-${request.nozzle.number}`
+          : "—"
+        }
+      </div>
+
+
+      <div className="
+        text-[11px]
+        text-muted-foreground
+        truncate
+      ">
+        {request.nozzle?.fuelType?.name ?? "Fuel type unknown"}
+      </div>
+
+
+    </div>
+
+
+  </div>
+</div>
 
         <div className="flex items-center gap-2.5">
           <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-white/80 dark:bg-white/10 shadow-sm">
@@ -763,7 +807,7 @@ function StateCard({
   tone?: "neutral" | "error";
 }) {
   return (
-    <Card className="rounded-2xl border bg-background/60 backdrop-blur">
+    <Card className="rounded-2xl border bg-background/60 backdrop-blur m-5">
       <CardContent className="flex min-h-[220px] flex-col items-center justify-center gap-3 p-6 text-center">
         <span
           className={`flex h-12 w-12 items-center justify-center rounded-full ${
