@@ -3,6 +3,14 @@ export type EquipmentStatus =
   | "INACTIVE"
   | "MAINTENANCE"
 
+export interface FuelType  {
+
+  id: string;
+
+  name: string;
+
+};
+
 
 
 export interface Nozzle {
@@ -12,13 +20,7 @@ export interface Nozzle {
   number: number;
 
 
-  fuelType: {
-
-    id: string;
-
-    name: string;
-
-  };
+  fuelType: FuelType;
 
 
   status: EquipmentStatus;

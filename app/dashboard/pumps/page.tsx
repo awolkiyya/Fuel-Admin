@@ -65,6 +65,7 @@ import {
 } from "@/components/dispenser/AddNozzleDialog"
 import { CreateDispenserDialog } from "@/components/dispenser/CreateDispenserDialog"
 import { useFuelTypes } from "@/hooks/station/useStations"
+import { EquipmentStatus } from "@/types/pump.types"
 
 
 
@@ -354,66 +355,56 @@ filtered.map(
 <DispenserCard
 
 
-key={
-dispenser.id
-}
+      key={dispenser.id}
 
 
 
-dispenser={
-dispenser
-}
+      dispenser={dispenser}
 
 
 
-expanded={
-expanded===dispenser.id
-}
+      expanded={expanded === dispenser.id}
 
 
 
-onExpand={()=>{
+      onExpand={() => {
 
 
-setExpanded(
+        setExpanded(
 
-prev=>
+          prev => prev === dispenser.id
 
-prev===dispenser.id
+            ?
 
-?
+            null
 
-null
+            :
 
-:
+            dispenser.id
 
-dispenser.id
-
-)
+        )
 
 
-}}
+      } }
 
 
 
-onAddNozzle={()=>{
+      onAddNozzle={() => {
 
 
-setSelectedDispenser({
+        setSelectedDispenser({
+          id: dispenser.id,
 
-id:dispenser.id,
-
-name:
-`Dispenser #${dispenser.number}`
-
-})
+          name: `Dispenser #${dispenser.number}`
+        })
 
 
-setNozzleOpen(true)
+        setNozzleOpen(true)
 
 
-}}
-
+      } } onStatusChange={function (status: EquipmentStatus): void {
+        throw new Error("Function not implemented.")
+      } }
 
 
 />

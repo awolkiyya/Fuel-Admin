@@ -102,7 +102,7 @@ export const useTogglePumpStatus = (stationId?: string) => {
                   ? {
                       ...p,
                       status:
-                        p.status === "active"
+                        p.status === "ACTIVE"
                           ? "inactive"
                           : "active",
                     }
@@ -183,7 +183,7 @@ export const useToggleNozzle = (stationId?: string) => {
                       ? {
                           ...n,
                           status:
-                            n.status === "active"
+                            n.status === "ACTIVE"
                               ? "maintenance"
                               : "active",
                         }

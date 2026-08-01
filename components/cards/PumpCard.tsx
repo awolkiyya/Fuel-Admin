@@ -7,7 +7,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { Pump } from "@/types/pump.types"
+import { Dispenser } from "@/types/pump.types"
 
 export function PumpCard({
   pump,
@@ -16,10 +16,10 @@ export function PumpCard({
   onExpand,
   isExpanded,
 }: {
-  pump: Pump
+  pump: Dispenser
   isExpanded: boolean
   onToggle: (id: string) => void
-  onAddNozzle: (pump: Pump) => void
+  onAddNozzle: (pump: Dispenser) => void
   onExpand: (id: string) => void
 }) {
   return (

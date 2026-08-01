@@ -1,12 +1,12 @@
 import { Button } from "@/components/ui/button"
-import { Pump } from "@/types/pump.types"
+import { Dispenser } from "@/types/pump.types"
 import { Wrench } from "lucide-react"
 
 export function NozzleList({
   pump,
   onToggleNozzle,
 }: {
-  pump: Pump
+  pump: Dispenser
   onToggleNozzle: (pumpId: string, nozzleId: string) => void
 }) {
   return (
@@ -21,7 +21,7 @@ export function NozzleList({
               Nozzle #{n.number}
             </p>
             <p className="text-xs text-muted-foreground">
-              {n.fuelType} • {n.status}
+              {n.status} • {n.status}
             </p>
           </div>
 

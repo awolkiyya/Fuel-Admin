@@ -70,15 +70,15 @@ export function DriverDetailsModal({
           
           <div className="flex items-center gap-4">
             <Avatar className="h-14 w-14">
-              <AvatarImage src={driver.avatar || ""} />
+              <AvatarImage src={driver.profile_image || ""} />
               <AvatarFallback>
-                {getInitials(driver.fullName)}
+                {getInitials(driver.full_name)}
               </AvatarFallback>
             </Avatar>
 
             <div>
               <h2 className="text-lg font-semibold">
-                {driver.fullName}
+                {driver.full_name}
               </h2>
               <p className="text-sm text-muted-foreground">
                 {driver.phone}
@@ -91,8 +91,8 @@ export function DriverDetailsModal({
 
           <div className="flex flex-col items-end gap-2">
             <Badge>{driver.status}</Badge>
-            <Badge variant={riskColor(driver.riskLevel)}>
-              {driver.riskLevel} risk
+            <Badge variant={riskColor(driver.riskSummary.level)}>
+              {driver.riskSummary.level} risk
             </Badge>
           </div>
 
@@ -117,7 +117,7 @@ export function DriverDetailsModal({
 
           <div>
             <p className="text-muted-foreground">Risk Reason</p>
-            <p>{driver.riskReason || "—"}</p>
+            <p>{driver.riskSummary.reason || "—"}</p>
           </div>
 
         </div>
