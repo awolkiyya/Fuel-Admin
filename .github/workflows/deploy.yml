@@ -11,12 +11,10 @@ jobs:
 
     runs-on: ubuntu-latest
 
-
     steps:
 
       - name: Checkout repository
         uses: actions/checkout@v4
-
 
 
       - name: Deploy to Server
@@ -30,6 +28,7 @@ jobs:
 
           key: ${{ secrets.SSH_PRIVATE_KEY }}
 
+          port: 22
 
           script: |
 
@@ -44,7 +43,7 @@ jobs:
             cd /var/www/Fuel-Admin
 
 
-            echo "📥 Pulling latest code..."
+            echo "📥 Updating source code..."
 
             git fetch origin main
 
@@ -52,9 +51,9 @@ jobs:
 
 
 
-            echo "🐳 Building Docker images..."
+            echo "🐳 Building Docker containers..."
 
-            docker compose build
+            docker compose build frontend
 
 
 
@@ -70,24 +69,26 @@ jobs:
 
 
 
-            echo "🧹 Cleaning unused images..."
+            echo "🧹 Removing unused Docker images..."
 
             docker image prune -f
 
 
 
-            echo "📦 Container status..."
+            echo "📦 Current containers..."
 
-            docker ps
+            docker compose ps
 
 
 
-            echo "🏥 Running health check..."
+            echo "🏥 Checking application..."
+
+            sleep 10
 
             curl -f http://localhost/health || echo "⚠️ Health check failed"
 
 
 
             echo "======================================"
-            echo "✅ Deployment completed successfully"
+            echo "✅ Deployment completed"
             echo "======================================"
