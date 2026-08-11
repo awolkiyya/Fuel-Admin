@@ -1,264 +1,396 @@
-import { api } from "@/lib/api";
-import { ApproveQuotaPayload, CancelQuotaPayload, CreateQuotaPayload, FuelQuota, GetActiveQuotaParams, QuotaFilters, QuotaListResponse, UpdateQuotaPayload } from "@/types/quota.types";
-import { formatApiError } from "@/utils/apiError";
+import { api } from "@/lib/api"
+import { formatApiError } from "@/utils/apiError"
+
+import {
+  PaginatedResponse,
+  SingleResponse,
+} from "@/types/api"
+
+import {
+  ApproveQuotaPayload,
+  CancelQuotaPayload,
+  CreateQuotaPayload,
+  FuelQuota,
+  GetActiveQuotaParams,
+  QuotaFilters,
+  UpdateQuotaPayload,
+} from "@/types/quota.types"
 
 
 // =====================================================
 // QUOTA SERVICE
 // =====================================================
 
+
 export const quotaService = {
   // ===================================================
   // GET QUOTAS
   // ===================================================
 
+
   async getQuotas(params?: {
-    page?: number;
-    limit?: number;
-    filters?: QuotaFilters;
-  }): Promise<QuotaListResponse> {
+    page?: number
+    limit?: number
+    filters?: QuotaFilters
+  }): Promise<
+    PaginatedResponse<FuelQuota>
+  > {
     try {
       const {
         page = 1,
         limit = 10,
         filters = {},
-      } = params ?? {};
+      } = params ?? {}
+
 
       const searchParams =
-        new URLSearchParams();
+        new URLSearchParams()
 
-      searchParams.append(
+
+      // -------------------------------------------------
+      // PAGINATION
+      // -------------------------------------------------
+
+
+      searchParams.set(
         "page",
         String(page),
-      );
+      )
 
-      searchParams.append(
+
+      searchParams.set(
         "limit",
         String(limit),
-      );
+      )
+
 
       // -------------------------------------------------
       // ORGANIZATION
       // -------------------------------------------------
 
+
       if (filters.organizationId) {
-        searchParams.append(
+        searchParams.set(
           "organizationId",
           filters.organizationId,
-        );
+        )
       }
+
 
       // -------------------------------------------------
       // FUEL TYPE
       // -------------------------------------------------
 
+
       if (filters.fuelTypeId) {
-        searchParams.append(
+        searchParams.set(
           "fuelTypeId",
           filters.fuelTypeId,
-        );
+        )
       }
 
+
       // -------------------------------------------------
-      // PERIOD
+      // PERIOD TYPE
       // -------------------------------------------------
+
 
       if (filters.periodType) {
-        searchParams.append(
+        searchParams.set(
           "periodType",
           filters.periodType,
-        );
+        )
       }
+
 
       // -------------------------------------------------
       // STATUS
       // -------------------------------------------------
 
+
       if (filters.status) {
-        searchParams.append(
+        searchParams.set(
           "status",
           filters.status,
-        );
+        )
       }
 
+
       // -------------------------------------------------
-      // DATE RANGE
+      // START DATE
       // -------------------------------------------------
+
 
       if (filters.startDate) {
-        searchParams.append(
+        searchParams.set(
           "startDate",
           filters.startDate,
-        );
+        )
       }
+
+
+      // -------------------------------------------------
+      // END DATE
+      // -------------------------------------------------
+
 
       if (filters.endDate) {
-        searchParams.append(
+        searchParams.set(
           "endDate",
           filters.endDate,
-        );
+        )
       }
 
-      const { data } = await api.get(
-        `/organizations/quotas?${searchParams.toString()}`,
-      );
 
-      return data;
+      // -------------------------------------------------
+      // REQUEST
+      // -------------------------------------------------
+
+
+      const { data } =
+        await api.get<
+          PaginatedResponse<FuelQuota>
+        >(
+          `/organizations/quotas?${searchParams.toString()}`,
+        )
+
+
+      return data
     } catch (error) {
-      throw formatApiError(error);
+      throw formatApiError(error)
     }
   },
+
 
   // ===================================================
   // GET QUOTA BY ID
   // ===================================================
 
+
   async getQuota(
     id: string,
-  ): Promise<FuelQuota> {
+  ): Promise<
+    SingleResponse<FuelQuota>
+  > {
     try {
-      const { data } = await api.get(
-        `/organizations/quotas/${id}`,
-      );
+      const { data } =
+        await api.get<
+          SingleResponse<FuelQuota>
+        >(
+          `/organizations/quotas/${id}`,
+        )
 
-      return data.data;
+
+      return data
     } catch (error) {
-      throw formatApiError(error);
+      throw formatApiError(error)
     }
   },
+
 
   // ===================================================
   // CREATE QUOTA
   // ===================================================
 
+
   async createQuota(
     payload: CreateQuotaPayload,
-  ): Promise<FuelQuota> {
+  ): Promise<
+    SingleResponse<FuelQuota>
+  > {
     try {
-      const { data } = await api.post(
-        "/organizations/quotas",
-        payload,
-      );
+      const { data } =
+        await api.post<
+          SingleResponse<FuelQuota>
+        >(
+          "/organizations/quotas",
+          payload,
+        )
 
-      return data.data;
+
+      return data
     } catch (error) {
-      throw formatApiError(error);
+      throw formatApiError(error)
     }
   },
+
 
   // ===================================================
   // UPDATE QUOTA
   // ===================================================
 
+
   async updateQuota(
     id: string,
     payload: UpdateQuotaPayload,
-  ): Promise<FuelQuota> {
+  ): Promise<
+    SingleResponse<FuelQuota>
+  > {
     try {
-      const { data } = await api.patch(
-        `/organizations/quotas/${id}`,
-        payload,
-      );
+      const { data } =
+        await api.patch<
+          SingleResponse<FuelQuota>
+        >(
+          `/organizations/quotas/${id}`,
+          payload,
+        )
 
-      return data.data;
+
+      return data
     } catch (error) {
-      throw formatApiError(error);
+      throw formatApiError(error)
     }
   },
+
 
   // ===================================================
   // APPROVE QUOTA
   // ===================================================
 
+
   async approveQuota(
     id: string,
     payload: ApproveQuotaPayload,
-  ): Promise<FuelQuota> {
+  ): Promise<
+    SingleResponse<FuelQuota>
+  > {
     try {
-      const { data } = await api.post(
-        `/organizations/quotas/${id}/approve`,
-        payload,
-      );
+      const { data } =
+        await api.post<
+          SingleResponse<FuelQuota>
+        >(
+          `/organizations/quotas/${id}/approve`,
+          payload,
+        )
 
-      return data.data;
+
+      return data
     } catch (error) {
-      throw formatApiError(error);
+      throw formatApiError(error)
     }
   },
+
 
   // ===================================================
   // CANCEL QUOTA
   // ===================================================
 
+
   async cancelQuota(
     id: string,
     payload: CancelQuotaPayload,
-  ): Promise<FuelQuota> {
+  ): Promise<
+    SingleResponse<FuelQuota>
+  > {
     try {
-      const { data } = await api.post(
-        `/organizations/quotas/${id}/cancel`,
-        payload,
-      );
+      const { data } =
+        await api.post<
+          SingleResponse<FuelQuota>
+        >(
+          `/organizations/quotas/${id}/cancel`,
+          payload,
+        )
 
-      return data.data;
+
+      return data
     } catch (error) {
-      throw formatApiError(error);
+      throw formatApiError(error)
     }
   },
+
 
   // ===================================================
   // GET ACTIVE QUOTA
   // ===================================================
 
+
   async getActiveQuota(
     params: GetActiveQuotaParams,
-  ): Promise<FuelQuota> {
+  ): Promise<
+    SingleResponse<FuelQuota>
+  > {
     try {
       const searchParams =
-        new URLSearchParams();
+        new URLSearchParams()
 
-      searchParams.append(
+
+      // -------------------------------------------------
+      // ORGANIZATION
+      // -------------------------------------------------
+
+
+      searchParams.set(
         "organizationId",
         params.organizationId,
-      );
+      )
 
-      searchParams.append(
+
+      // -------------------------------------------------
+      // FUEL TYPE
+      // -------------------------------------------------
+
+
+      searchParams.set(
         "fuelTypeId",
         params.fuelTypeId,
-      );
+      )
+
+
+      // -------------------------------------------------
+      // DATE
+      // -------------------------------------------------
+
 
       if (params.date) {
-        searchParams.append(
+        searchParams.set(
           "date",
           params.date,
-        );
+        )
       }
 
-      const { data } = await api.get(
-        `/organizations/quotas/active?${searchParams.toString()}`,
-      );
 
-      return data.data;
+      // -------------------------------------------------
+      // REQUEST
+      // -------------------------------------------------
+
+
+      const { data } =
+        await api.get<
+          SingleResponse<FuelQuota>
+        >(
+          `/organizations/quotas/active?${searchParams.toString()}`,
+        )
+
+
+      return data
     } catch (error) {
-      throw formatApiError(error);
+      throw formatApiError(error)
     }
   },
+
 
   // ===================================================
   // REFRESH QUOTA STATUS
   // ===================================================
 
+
   async refreshQuotaStatus(
     id: string,
-  ): Promise<FuelQuota> {
+  ): Promise<
+    SingleResponse<FuelQuota>
+  > {
     try {
-      const { data } = await api.post(
-        `/organizations/quotas/${id}/refresh-status`,
-      );
+      const { data } =
+        await api.post<
+          SingleResponse<FuelQuota>
+        >(
+          `/organizations/quotas/${id}/refresh-status`,
+        )
 
-      return data.data;
+
+      return data
     } catch (error) {
-      throw formatApiError(error);
+      throw formatApiError(error)
     }
   },
-};
+}

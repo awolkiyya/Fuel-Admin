@@ -12,6 +12,7 @@ export type OrgType =
   | "PRIVATE"
   | "NGO"
   | "PUBLIC_ENTERPRISE"
+  | "PRIVATE_COMPANY"
   | "OTHER";
 
 // =====================================================
@@ -21,7 +22,16 @@ export type OrgType =
 export type OrgStatus =
   | "ACTIVE"
   | "INACTIVE"
+  | "PENDING"
+  | "BLOCKED"
   | "SUSPENDED";
+
+export type PaymentStatus = "PAID" | "UNPAID" | "PARTIAL"
+
+
+export type QuotaStatus = "ACTIVE" | "EXPIRED" | "EXHAUSTED" | "SUSPENDED"
+
+
 
 // =====================================================
 // ORGANIZATION
@@ -64,7 +74,7 @@ export interface Organization {
 
   allowFuelAccess: boolean;
 
-  quotaEnabled: boolean;
+  requiresQuota: boolean;
 
   maxTransactionLiters: number;
 
@@ -123,6 +133,10 @@ export interface OrganizationQuotaSummary {
   id: string;
 
   fuelTypeId: string;
+  fuelType: {
+    id: string;
+    name: string;
+  };
 
   periodType: string;
 
@@ -176,7 +190,7 @@ export interface CreateOrganizationPayload {
 
   allowFuelAccess?: boolean;
 
-  quotaEnabled?: boolean;
+  requiresQuota?: boolean;
 
   maxTransactionLiters?: number;
 }
@@ -202,7 +216,7 @@ export interface UpdateOrganizationPayload {
 
   allowFuelAccess?: boolean;
 
-  quotaEnabled?: boolean;
+  requiresQuota?: boolean;
 
   maxTransactionLiters?: number;
 }
@@ -240,36 +254,10 @@ export interface OrganizationFilters {
 
   allowFuelAccess?: boolean;
 
-  quotaEnabled?: boolean;
+  requiresQuota?: boolean;
 }
 
-// =====================================================
-// PAGINATION
-// =====================================================
 
-export interface PaginationMeta {
-  page: number;
-
-  limit: number;
-
-  total: number;
-
-  totalPages: number;
-
-  hasNextPage: boolean;
-
-  hasPreviousPage: boolean;
-}
-
-// =====================================================
-// ORGANIZATION LIST RESPONSE
-// =====================================================
-
-export interface OrganizationListResponse {
-  data: Organization[];
-
-  meta: PaginationMeta;
-}
 
 // =====================================================
 // ORGANIZATION STATISTICS
@@ -312,7 +300,7 @@ export interface OrganizationFormValues {
 
   allowFuelAccess: boolean;
 
-  quotaEnabled: boolean;
+  requiresQuota: boolean;
 
   maxTransactionLiters: number;
 }
@@ -337,18 +325,4 @@ export interface OrganizationTypeConfig {
   label: string;
 
   description: string;
-}
-
-// =====================================================
-// API RESPONSE
-// =====================================================
-
-export interface ApiResponse<T> {
-  success: boolean;
-
-  message: string;
-
-  data: T;
-
-  meta?: PaginationMeta;
 }

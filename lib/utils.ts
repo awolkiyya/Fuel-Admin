@@ -319,3 +319,7 @@ export function getPaymentMeta(status?: string) {
     }
   )
 }
+export const fmtLiters = (n: number) => `${n.toLocaleString("en-US")} L`
+export const fmtBirr = (n: number) => `ETB ${n.toLocaleString("en-US", { maximumFractionDigits: 0 })}`
+export const fmtPct = (n: number) => `${Math.round(n)}%`
+export const todayISO = () => new Date().toISOString().slice(0, 10)

@@ -1,14 +1,14 @@
-// =====================================================
-// QUOTA ENUMS
-// =====================================================
+// ============================================================================
+// QUOTA PERIOD TYPE
+// ============================================================================
 
 export type QuotaPeriodType =
   | "DAILY"
   | "WEEKLY"
   | "MONTHLY"
   | "QUARTERLY"
-  | "YEARLY"
-  | "CUSTOM";
+  | "ANNUAL"
+  | "CUSTOM"
 
 export type QuotaStatus =
   | "ACTIVE"
@@ -262,4 +262,52 @@ export interface QuotaStatusConfig {
   description: string;
 
   className?: string;
+}
+
+export const PERIOD_TYPES: QuotaPeriodType[] = [
+  "DAILY",
+  "WEEKLY",
+  "MONTHLY",
+  "QUARTERLY",
+  "ANNUAL",
+  "CUSTOM",
+]
+
+export const PERIOD_LABEL: Record<
+  QuotaPeriodType,
+  string
+> = {
+  DAILY: "Daily",
+  WEEKLY: "Weekly",
+  MONTHLY: "Monthly",
+  QUARTERLY: "Quarterly",
+  ANNUAL: "Yearly",
+  CUSTOM: "Custom",
+}
+
+
+// ============================================================================
+// TYPES
+// ============================================================================
+
+export interface QuotaFormState {
+  organizationId: string
+
+  /**
+   * ID of the fuel configuration from the backend.
+   *
+   * This should reference the fuel_types/fuels table.
+   */
+  fuelTypeId: string
+
+  periodType: QuotaPeriodType
+
+  startDate: string
+
+  endDate: string
+
+  allocatedLiters: string
+
+
+  remarks: string
 }

@@ -1,18 +1,20 @@
 import { api } from "@/lib/api"
+import { formatApiError } from "@/utils/apiError"
+
+import {
+  PaginatedResponse,
+  SingleResponse,
+} from "@/types/api"
 
 import {
   CreateOrganizationPayload,
   Organization,
   OrganizationFilters,
-  OrganizationListResponse,
   OrganizationStatistics,
   UpdateOrganizationFuelAccessPayload,
   UpdateOrganizationPayload,
   UpdateOrganizationStatusPayload,
-  ApiResponse,
 } from "@/types/organization.types"
-
-import { formatApiError } from "@/utils/apiError"
 
 // =====================================================
 // ORGANIZATION SERVICE
@@ -27,7 +29,9 @@ export const organizationService = {
     page?: number
     limit?: number
     filters?: OrganizationFilters
-  }): Promise<OrganizationListResponse> {
+  }): Promise<
+    PaginatedResponse<Organization>
+  > {
     try {
       const {
         page = 1,
@@ -38,14 +42,18 @@ export const organizationService = {
       const searchParams =
         new URLSearchParams()
 
+      // -------------------------------------------------
+      // PAGINATION
+      // -------------------------------------------------
+
       searchParams.set(
         "page",
-        String(page)
+        String(page),
       )
 
       searchParams.set(
         "limit",
-        String(limit)
+        String(limit),
       )
 
       // -------------------------------------------------
@@ -55,7 +63,7 @@ export const organizationService = {
       if (filters.search?.trim()) {
         searchParams.set(
           "search",
-          filters.search.trim()
+          filters.search.trim(),
         )
       }
 
@@ -66,7 +74,7 @@ export const organizationService = {
       if (filters.type) {
         searchParams.set(
           "type",
-          filters.type
+          filters.type,
         )
       }
 
@@ -77,7 +85,7 @@ export const organizationService = {
       if (filters.status) {
         searchParams.set(
           "status",
-          filters.status
+          filters.status,
         )
       }
 
@@ -92,8 +100,8 @@ export const organizationService = {
         searchParams.set(
           "allowFuelAccess",
           String(
-            filters.allowFuelAccess
-          )
+            filters.allowFuelAccess,
+          ),
         )
       }
 
@@ -108,19 +116,23 @@ export const organizationService = {
         searchParams.set(
           "quotaEnabled",
           String(
-            filters.quotaEnabled
-          )
+            filters.quotaEnabled,
+          ),
         )
       }
 
-      const response =
+      // -------------------------------------------------
+      // REQUEST
+      // -------------------------------------------------
+
+      const { data } =
         await api.get<
-          OrganizationListResponse
+          PaginatedResponse<Organization>
         >(
-          `/organizations?${searchParams.toString()}`
+          `/organizations?${searchParams.toString()}`,
         )
 
-      return response.data
+      return data
     } catch (error) {
       throw formatApiError(error)
     }
@@ -131,17 +143,19 @@ export const organizationService = {
   // ===================================================
 
   async getOrganization(
-    id: string
-  ): Promise<Organization> {
+    id: string,
+  ): Promise<
+    SingleResponse<Organization>
+  > {
     try {
-      const response =
+      const { data } =
         await api.get<
-          ApiResponse<Organization>
+          SingleResponse<Organization>
         >(
-          `/organizations/${id}`
+          `/organizations/${id}`,
         )
 
-      return response.data.data
+      return data
     } catch (error) {
       throw formatApiError(error)
     }
@@ -152,18 +166,20 @@ export const organizationService = {
   // ===================================================
 
   async createOrganization(
-    payload: CreateOrganizationPayload
-  ): Promise<Organization> {
+    payload: CreateOrganizationPayload,
+  ): Promise<
+    SingleResponse<Organization>
+  > {
     try {
-      const response =
+      const { data } =
         await api.post<
-          ApiResponse<Organization>
+          SingleResponse<Organization>
         >(
           "/organizations",
-          payload
+          payload,
         )
 
-      return response.data.data
+      return data
     } catch (error) {
       throw formatApiError(error)
     }
@@ -175,18 +191,20 @@ export const organizationService = {
 
   async updateOrganization(
     id: string,
-    payload: UpdateOrganizationPayload
-  ): Promise<Organization> {
+    payload: UpdateOrganizationPayload,
+  ): Promise<
+    SingleResponse<Organization>
+  > {
     try {
-      const response =
+      const { data } =
         await api.patch<
-          ApiResponse<Organization>
+          SingleResponse<Organization>
         >(
           `/organizations/${id}`,
-          payload
+          payload,
         )
 
-      return response.data.data
+      return data
     } catch (error) {
       throw formatApiError(error)
     }
@@ -198,18 +216,20 @@ export const organizationService = {
 
   async updateOrganizationStatus(
     id: string,
-    payload: UpdateOrganizationStatusPayload
-  ): Promise<Organization> {
+    payload: UpdateOrganizationStatusPayload,
+  ): Promise<
+    SingleResponse<Organization>
+  > {
     try {
-      const response =
+      const { data } =
         await api.patch<
-          ApiResponse<Organization>
+          SingleResponse<Organization>
         >(
           `/organizations/${id}/status`,
-          payload
+          payload,
         )
 
-      return response.data.data
+      return data
     } catch (error) {
       throw formatApiError(error)
     }
@@ -221,18 +241,20 @@ export const organizationService = {
 
   async updateFuelAccess(
     id: string,
-    payload: UpdateOrganizationFuelAccessPayload
-  ): Promise<Organization> {
+    payload: UpdateOrganizationFuelAccessPayload,
+  ): Promise<
+    SingleResponse<Organization>
+  > {
     try {
-      const response =
+      const { data } =
         await api.patch<
-          ApiResponse<Organization>
+          SingleResponse<Organization>
         >(
           `/organizations/${id}/fuel-access`,
-          payload
+          payload,
         )
 
-      return response.data.data
+      return data
     } catch (error) {
       throw formatApiError(error)
     }
@@ -242,16 +264,18 @@ export const organizationService = {
   // GET STATISTICS
   // ===================================================
 
-  async getStatistics(): Promise<OrganizationStatistics> {
+  async getStatistics(): Promise<
+    SingleResponse<OrganizationStatistics>
+  > {
     try {
-      const response =
+      const { data } =
         await api.get<
-          ApiResponse<OrganizationStatistics>
+          SingleResponse<OrganizationStatistics>
         >(
-          "/organizations/statistics"
+          "/organizations/statistics",
         )
 
-      return response.data.data
+      return data
     } catch (error) {
       throw formatApiError(error)
     }
@@ -262,11 +286,11 @@ export const organizationService = {
   // ===================================================
 
   async deleteOrganization(
-    id: string
+    id: string,
   ): Promise<void> {
     try {
       await api.delete(
-        `/organizations/${id}`
+        `/organizations/${id}`,
       )
     } catch (error) {
       throw formatApiError(error)
