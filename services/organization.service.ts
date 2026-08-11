@@ -110,13 +110,13 @@ export const organizationService = {
       // -------------------------------------------------
 
       if (
-        filters.quotaEnabled !==
+        filters.requiresQuota !==
         undefined
       ) {
         searchParams.set(
           "quotaEnabled",
           String(
-            filters.quotaEnabled,
+            filters.requiresQuota,
           ),
         )
       }
