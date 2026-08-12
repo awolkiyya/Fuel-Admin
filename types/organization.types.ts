@@ -326,3 +326,4 @@ export interface OrganizationTypeConfig {
 
   description: string;
 }
+

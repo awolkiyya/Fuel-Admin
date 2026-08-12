@@ -1,37 +1,25 @@
-"use client"
+"use client";
 
-import React, { useCallback } from "react"
+import React, { useCallback } from "react";
 
-import { organizationService } from "@/services/organization.service"
+import { organizationService } from "@/services/organization.service";
 
-import type { Organization } from "@/types/organization.types"
+import type { Organization } from "@/types/organization.types";
 
-import { AsyncDropdown } from "../AsyncDropdown"
-
-// ============================================================================
-// PROPS
-// ============================================================================
+import { AsyncDropdown } from "../AsyncDropdown";
 
 interface OrganizationDropdownProps {
-  value: string | null
+  value: string | null;
 
   onChange: (
     value: string,
     item: Organization,
-  ) => void
+  ) => void;
 
-  disabled?: boolean
+  disabled?: boolean;
 
-  /**
-   * Optional organization IDs that should not
-   * appear in the dropdown.
-   */
-  excludeIds?: string[]
+  excludeIds?: string[];
 }
-
-// ============================================================================
-// COMPONENT
-// ============================================================================
 
 export const OrganizationDropdown: React.FC<
   OrganizationDropdownProps
@@ -41,65 +29,44 @@ export const OrganizationDropdown: React.FC<
   disabled = false,
   excludeIds = [],
 }) => {
-  // ==========================================================================
-  // FETCH ORGANIZATIONS
-  // ==========================================================================
-
   const fetchData = useCallback(
     async ({
       search,
       page,
-      pageSize,
     }: {
-      search?: string
-      page: number
-      pageSize: number
+      search?: string;
+      page: number;
     }) => {
       const result =
         await organizationService.getOrganizations({
           page,
-          limit: 10,
-
           filters: {
             search: search?.trim() || "",
             status: "ACTIVE",
           },
-        })
+        });
 
       let data: Organization[] =
-        result.data || []
-
-      // =========================================================================
-      // OPTIONAL CLIENT-SIDE EXCLUSION
-      // =========================================================================
+        result.data || [];
 
       if (excludeIds.length > 0) {
-        const excluded = new Set(
-          excludeIds,
-        )
+        const excluded = new Set(excludeIds);
 
         data = data.filter(
           (organization) =>
-            !excluded.has(
-              organization.id,
-            ),
-        )
+            !excluded.has(organization.id),
+        );
       }
 
       return {
         data,
-
         total:
           result.meta?.total ??
           data.length,
-      }
+      };
     },
     [excludeIds],
-  )
-
-  // ==========================================================================
-  // RENDER
-  // ==========================================================================
+  );
 
   return (
     <AsyncDropdown<
@@ -114,5 +81,5 @@ export const OrganizationDropdown: React.FC<
       placeholder="Search organization..."
       disabled={disabled}
     />
-  )
-}
+  );
+};
