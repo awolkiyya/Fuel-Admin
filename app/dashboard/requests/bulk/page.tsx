@@ -58,30 +58,19 @@ import { FuelTypeDropdown } from "@/components/inputs/FuelTypeDropdown";
 
 import type { FuelConfig } from "@/types/commen";
 
-
-
 import type {
   CreateOrganizationTransactionPayload,
   Transaction,
 } from "@/types/transaction.types";
-import { useCreateOrganizationTransaction } from "@/hooks/transaction/createOrganizationTransaction..hook";
 
+import { useCreateOrganizationTransaction } from "@/hooks/transaction/createOrganizationTransaction..hook";
+import { OrgStatus, OrgType } from "@/types/organization.types";
 
 // =====================================================
 // TYPES
 // =====================================================
 
-type OrgType =
-  | "GOVERNMENT"
-  | "PRIVATE"
-  | "NGO"
-  | "PUBLIC_ENTERPRISE"
-  | "OTHER";
 
-type OrgStatus =
-  | "ACTIVE"
-  | "INACTIVE"
-  | "SUSPENDED";
 
 
 type DropdownOrganization = {
@@ -89,11 +78,21 @@ type DropdownOrganization = {
   name: string;
   type: OrgType;
   status: OrgStatus;
-  registrationNumber: string;
-  contactPerson: string;
-  phone: string;
-};
+  registrationNumber?: string | null;
+  contactPerson?: string | null;
+  phone?: string | null;
 
+  email?: string | null;
+
+  address?: string | null;
+  // Optional fueling information if returned
+  // directly by OrganizationDropdown.
+  allowFuelAccess?: boolean;
+  maxTransactionLiters?: number;
+  quotaEnabled?: boolean;
+  quota?: Quota[];
+  recentTransactions?: RecentTransaction[];
+};
 
 type Quota = {
   fuelTypeId: string;
@@ -105,7 +104,6 @@ type Quota = {
   expiresAt: string;
 };
 
-
 type RecentTransaction = {
   id: string;
   fuelType: string;
@@ -113,7 +111,6 @@ type RecentTransaction = {
   date: string;
   status: "COMPLETED" | "PENDING";
 };
-
 
 type FuelingOrganization = DropdownOrganization & {
   allowFuelAccess: boolean;
@@ -123,13 +120,11 @@ type FuelingOrganization = DropdownOrganization & {
   recentTransactions: RecentTransaction[];
 };
 
-
 type StepId =
   | "org"
   | "fuel"
   | "confirm"
   | "success";
-
 
 type FuelReceipt = {
   id: string;
@@ -138,6 +133,7 @@ type FuelReceipt = {
   liters: number;
   unitPrice: number;
   total: number;
+  paymentStatus: string;
   time: string;
 };
 
@@ -152,14 +148,12 @@ function formatNumber(value: number) {
   }).format(value);
 }
 
-
 function formatCurrency(value: number) {
   return new Intl.NumberFormat("en-US", {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   }).format(value);
 }
-
 
 function getOrganizationTypeLabel(type: OrgType) {
   switch (type) {
@@ -179,7 +173,6 @@ function getOrganizationTypeLabel(type: OrgType) {
       return "Other";
   }
 }
-
 
 function getStatusMeta(status: OrgStatus) {
   switch (status) {
@@ -210,9 +203,12 @@ function getStatusMeta(status: OrgStatus) {
   }
 }
 
-
-function getFuelPrice(fuel: FuelConfig | null) {
-  if (!fuel) return 0;
+function getFuelPrice(
+  fuel: FuelConfig | null,
+) {
+  if (!fuel) {
+    return 0;
+  }
 
   const fuelRecord = fuel as FuelConfig & {
     pricePerLiter?: number;
@@ -235,8 +231,11 @@ function getFuelPrice(fuel: FuelConfig | null) {
 // FUEL STYLE
 // =====================================================
 
-function getFuelStyle(fuel: FuelConfig | null) {
-  const value = (fuel?.name || "").toLowerCase();
+function getFuelStyle(
+  fuel: FuelConfig | null,
+) {
+  const value =
+    (fuel?.name || "").toLowerCase();
 
   if (value.includes("diesel")) {
     return {
@@ -277,8 +276,9 @@ function getFuelStyle(fuel: FuelConfig | null) {
   };
 }
 
-
-function getQuotaBarTone(pct: number) {
+function getQuotaBarTone(
+  pct: number,
+) {
   if (pct >= 90) {
     return "[&>div]:bg-red-500";
   }
@@ -323,22 +323,28 @@ export default function OrganizationFuelingPage() {
   // STATE
   // ===================================================
 
-  const [step, setStep] = useState<StepId>("org");
+  const [step, setStep] =
+    useState<StepId>("org");
 
   const [selectedOrg, setSelectedOrg] =
-    useState<FuelingOrganization | null>(null);
+    useState<FuelingOrganization | null>(
+      null,
+    );
 
   const [selectedFuel, setSelectedFuel] =
     useState<FuelConfig | null>(null);
 
-  const [liters, setLiters] = useState("");
+  const [liters, setLiters] =
+    useState("");
 
-  const [showHistory, setShowHistory] = useState(false);
+  const [showHistory, setShowHistory] =
+    useState(false);
 
   const [receipt, setReceipt] =
     useState<FuelReceipt | null>(null);
 
-  const [copied, setCopied] = useState(false);
+  const [copied, setCopied] =
+    useState(false);
 
 
   // ===================================================
@@ -347,7 +353,6 @@ export default function OrganizationFuelingPage() {
 
   const createTransactionMutation =
     useCreateOrganizationTransaction();
-
 
   const isSubmitting =
     createTransactionMutation.isPending;
@@ -360,22 +365,25 @@ export default function OrganizationFuelingPage() {
   const selectedFuelId =
     selectedFuel?.id ?? null;
 
-
   const selectedQuota =
     selectedOrg?.quota?.find(
       (quota) =>
-        quota.fuelTypeId === selectedFuelId,
+        quota.fuelTypeId ===
+        selectedFuelId,
     );
-
 
   const requestedLiters =
     Number(liters) || 0;
 
-
   const unitPrice =
     getFuelPrice(selectedFuel);
 
-
+  /*
+   * Frontend preview only.
+   *
+   * The final amount must come from
+   * the backend transaction response.
+   */
   const transactionAmount =
     requestedLiters * unitPrice;
 
@@ -525,7 +533,8 @@ export default function OrganizationFuelingPage() {
 
         if (transactionLimitExceeded) {
           return `Quantity exceeds the ${formatNumber(
-            selectedOrg?.maxTransactionLiters ?? 0,
+            selectedOrg?.maxTransactionLiters ??
+              0,
           )} L transaction limit.`;
         }
 
@@ -533,7 +542,21 @@ export default function OrganizationFuelingPage() {
           selectedOrg?.quotaEnabled &&
           quotaExceeded
         ) {
-          return "Quantity exceeds the remaining quota for this fuel type.";
+          if (!selectedQuota) {
+            return "This fuel type has no active quota.";
+          }
+
+          return `Quantity exceeds the remaining quota of ${formatNumber(
+            selectedQuota.remainingLiters,
+          )} L.`;
+        }
+
+        return null;
+      }
+
+      if (step === "confirm") {
+        if (!canFuel) {
+          return "The transaction is not valid for submission.";
         }
 
         return null;
@@ -548,6 +571,8 @@ export default function OrganizationFuelingPage() {
       accessDenied,
       transactionLimitExceeded,
       quotaExceeded,
+      selectedQuota,
+      canFuel,
     ]);
 
 
@@ -583,14 +608,29 @@ export default function OrganizationFuelingPage() {
       ...organization,
 
       /*
-       * These values should eventually come from
-       * the organization fueling API.
+       * Prefer values supplied by the API.
+       * Fall back to safe defaults until the
+       * organization endpoint exposes them.
        */
-      allowFuelAccess: true,
-      maxTransactionLiters: 5000,
-      quotaEnabled: false,
-      quota: [],
-      recentTransactions: [],
+      allowFuelAccess:
+        organization.allowFuelAccess ??
+        true,
+
+      maxTransactionLiters:
+        organization.maxTransactionLiters ??
+        5000,
+
+      quotaEnabled:
+        organization.quotaEnabled ??
+        false,
+
+      quota:
+        organization.quota ??
+        [],
+
+      recentTransactions:
+        organization.recentTransactions ??
+        [],
     };
 
     setSelectedOrg(
@@ -600,17 +640,28 @@ export default function OrganizationFuelingPage() {
     setSelectedFuel(null);
     setLiters("");
     setShowHistory(false);
+    setReceipt(null);
+    setCopied(false);
+
+    createTransactionMutation.reset();
+
     setStep("org");
   };
 
 
-  const handleClearOrganization = () => {
-    setSelectedOrg(null);
-    setSelectedFuel(null);
-    setLiters("");
-    setShowHistory(false);
-    setStep("org");
-  };
+  const handleClearOrganization =
+    () => {
+      setSelectedOrg(null);
+      setSelectedFuel(null);
+      setLiters("");
+      setShowHistory(false);
+      setReceipt(null);
+      setCopied(false);
+
+      createTransactionMutation.reset();
+
+      setStep("org");
+    };
 
 
   // ===================================================
@@ -623,12 +674,15 @@ export default function OrganizationFuelingPage() {
   ) => {
     setSelectedFuel(fuel);
     setLiters("");
+    createTransactionMutation.reset();
   };
 
 
   const handleClearFuel = () => {
     setSelectedFuel(null);
     setLiters("");
+
+    createTransactionMutation.reset();
   };
 
 
@@ -639,6 +693,10 @@ export default function OrganizationFuelingPage() {
   const handleAdjustLiters = (
     delta: number,
   ) => {
+    if (!selectedFuel) {
+      return;
+    }
+
     setLiters((previous) => {
       const current =
         Number(previous) || 0;
@@ -649,7 +707,19 @@ export default function OrganizationFuelingPage() {
           current + delta,
         );
 
-      return String(next);
+      /*
+       * Do not allow quick adjustment
+       * to exceed the maximum.
+       */
+      const bounded =
+        maxAllowed > 0
+          ? Math.min(
+              next,
+              maxAllowed,
+            )
+          : next;
+
+      return String(bounded);
     });
   };
 
@@ -658,42 +728,127 @@ export default function OrganizationFuelingPage() {
   // CREATE TRANSACTION
   // ===================================================
 
-  const handleConfirmDispense = async () => {
-    if (!canFuel || !selectedOrg || !selectedFuel) return;
-  
-    try {
-      const payload: CreateOrganizationTransactionPayload = {
-        type: "ORGANIZATION",
-        organizationId: selectedOrg.id,
-        stationId: "",
-        fuelTypeId: selectedFuel.id,
-        litersGiven: requestedLiters,
-        paymentStatus: "PAID",
-      };
-  
-      const response = await createTransactionMutation.mutateAsync(payload);
-  
-      const transaction = response.data;
-  
-      if (!transaction) {
-        throw new Error("Transaction was not returned by the server.");
+  const handleConfirmDispense =
+    async () => {
+      if (
+        !canFuel ||
+        !selectedOrg ||
+        !selectedFuel
+      ) {
+        return;
       }
-  
-      setReceipt({
-        id: transaction.id,
-        orgName: selectedOrg.name,
-        fuelName: selectedFuel.name,
-        liters: transaction.litersGiven,
-        unitPrice: transaction.pricePerLiter,
-        total: transaction.totalCost,
-        time: new Date(transaction.createdAt).toLocaleString(),
-      });
-  
-      setStep("success");
-    } catch (error) {
-      console.error("Organization fuel transaction failed:", error);
-    }
-  };
+
+      try {
+        /*
+         * IMPORTANT:
+         *
+         * The frontend does NOT decide the
+         * final transaction amount.
+         *
+         * Backend validates:
+         * - organization
+         * - station
+         * - fuel type
+         * - quantity
+         * - quota
+         * - price
+         * - total
+         * - payment
+         */
+        const payload:
+          CreateOrganizationTransactionPayload =
+          {
+            type: "ORGANIZATION",
+
+            organizationId:
+              selectedOrg.id,
+
+            /*
+             * Keep this according to your
+             * station context.
+             *
+             * If your hook automatically adds
+             * the authenticated station, remove
+             * stationId from the payload type/API.
+             */
+            stationId: "",
+
+            fuelTypeId:
+              selectedFuel.id,
+
+            litersGiven:
+              requestedLiters,
+
+            /*
+             * This is intentionally consistent
+             * with the confirmation UI.
+             */
+            paymentStatus: "PAID",
+          };
+
+        const response =
+          await createTransactionMutation
+            .mutateAsync(payload);
+
+        /*
+         * Safely extract the transaction.
+         *
+         * This avoids:
+         *
+         * "transaction is possibly undefined"
+         */
+        const transaction:
+          | Transaction
+          | undefined =
+          response?.data;
+
+        if (!transaction) {
+          throw new Error(
+            "Transaction was not returned by the server.",
+          );
+        }
+
+        /*
+         * Server values are authoritative.
+         */
+        setReceipt({
+          id: transaction.id,
+
+          orgName:
+            selectedOrg.name,
+
+          fuelName:
+            selectedFuel.name,
+
+          liters:
+            transaction.litersGiven,
+
+          unitPrice:
+            transaction.pricePerLiter,
+
+          total:
+            transaction.totalCost,
+
+          paymentStatus:
+            transaction.paymentStatus,
+
+          time:
+            new Date(
+              transaction.createdAt,
+            ).toLocaleString(),
+        });
+
+        setCopied(false);
+
+        setStep("success");
+      } catch (error) {
+        console.error(
+          "Organization fuel transaction failed:",
+          error,
+        );
+      }
+    };
+
 
   // ===================================================
   // START NEW TRANSACTION
@@ -715,7 +870,7 @@ export default function OrganizationFuelingPage() {
 
 
   // ===================================================
-  // COPY RECEIPT
+  // COPY RECEIPT ID
   // ===================================================
 
   const handleCopyReceiptId =
@@ -736,7 +891,7 @@ export default function OrganizationFuelingPage() {
           1800,
         );
       } catch {
-        // Ignore clipboard errors.
+        // Clipboard unavailable.
       }
     };
 
@@ -815,7 +970,9 @@ export default function OrganizationFuelingPage() {
 
                 return (
                   <React.Fragment
-                    key={currentStep.id}
+                    key={
+                      currentStep.id
+                    }
                   >
                     <li>
                       <button
@@ -831,7 +988,7 @@ export default function OrganizationFuelingPage() {
                         }
                         onClick={() =>
                           index <
-                          stepIndex &&
+                            stepIndex &&
                           setStep(
                             currentStep.id,
                           )
@@ -931,7 +1088,9 @@ export default function OrganizationFuelingPage() {
                   onChange={
                     handleSelectOrganization
                   }
-                  disabled={false}
+                  disabled={
+                    isSubmitting
+                  }
                 />
               </CardContent>
             </Card>
@@ -968,7 +1127,9 @@ export default function OrganizationFuelingPage() {
                     <div className="min-w-0 flex-1">
                       <div className="flex flex-wrap items-center gap-2">
                         <h3 className="truncate font-semibold">
-                          {selectedOrg.name}
+                          {
+                            selectedOrg.name
+                          }
                         </h3>
 
                         {(() => {
@@ -990,7 +1151,9 @@ export default function OrganizationFuelingPage() {
                             >
                               <StatusIcon className="h-3 w-3" />
 
-                              {meta.label}
+                              {
+                                meta.label
+                              }
                             </Badge>
                           );
                         })()}
@@ -1040,6 +1203,9 @@ export default function OrganizationFuelingPage() {
                         handleClearOrganization
                       }
                       aria-label="Remove organization"
+                      disabled={
+                        isSubmitting
+                      }
                     >
                       <XCircle className="h-5 w-5" />
                     </Button>
@@ -1097,6 +1263,7 @@ export default function OrganizationFuelingPage() {
 
                         <div className="mb-2 flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
                           <Gauge className="h-3.5 w-3.5" />
+
                           Quota by fuel type
                         </div>
 
@@ -1290,7 +1457,9 @@ export default function OrganizationFuelingPage() {
                 <Building2 className="h-4 w-4 shrink-0 text-primary" />
 
                 <p className="min-w-0 flex-1 truncate text-sm font-medium">
-                  {selectedOrg.name}
+                  {
+                    selectedOrg.name
+                  }
                 </p>
 
                 <Button
@@ -1299,6 +1468,9 @@ export default function OrganizationFuelingPage() {
                   className="h-auto p-0"
                   onClick={() =>
                     setStep("org")
+                  }
+                  disabled={
+                    isSubmitting
                   }
                 >
                   Change
@@ -1328,7 +1500,9 @@ export default function OrganizationFuelingPage() {
                     onChange={
                       handleSelectFuel
                     }
-                    disabled={false}
+                    disabled={
+                      isSubmitting
+                    }
                   />
 
                   {selectedFuel && (
@@ -1379,6 +1553,9 @@ export default function OrganizationFuelingPage() {
                         onClick={
                           handleClearFuel
                         }
+                        disabled={
+                          isSubmitting
+                        }
                       >
                         Change
                       </Button>
@@ -1425,19 +1602,54 @@ export default function OrganizationFuelingPage() {
                           id="liters-input"
                           type="number"
                           min="0"
+                          max={
+                            maxAllowed ||
+                            undefined
+                          }
+                          step="0.01"
                           inputMode="decimal"
                           value={
                             liters
                           }
                           onChange={(
                             event,
-                          ) =>
-                            setLiters(
+                          ) => {
+                            const value =
                               event
                                 .target
-                                .value,
-                            )
-                          }
+                                .value;
+
+                            if (
+                              value === ""
+                            ) {
+                              setLiters(
+                                "",
+                              );
+                              return;
+                            }
+
+                            const numeric =
+                              Number(
+                                value,
+                              );
+
+                            if (
+                              Number.isNaN(
+                                numeric,
+                              )
+                            ) {
+                              return;
+                            }
+
+                            setLiters(
+                              String(
+                                Math.max(
+                                  0,
+                                  numeric,
+                                ),
+                              ),
+                            );
+                          }}
                           placeholder="0"
                           disabled={
                             !selectedFuel ||
@@ -1457,7 +1669,9 @@ export default function OrganizationFuelingPage() {
                           size="icon"
                           disabled={
                             !selectedFuel ||
-                            isSubmitting
+                            isSubmitting ||
+                            requestedLiters >=
+                              maxAllowed
                           }
                           className="h-9 w-9 bg-slate-800 text-amber-400 hover:bg-slate-700"
                           onClick={() =>
@@ -1475,7 +1689,9 @@ export default function OrganizationFuelingPage() {
                           size="icon"
                           disabled={
                             !selectedFuel ||
-                            isSubmitting
+                            isSubmitting ||
+                            requestedLiters <=
+                              0
                           }
                           className="h-9 w-9 bg-slate-800 text-amber-400 hover:bg-slate-700"
                           onClick={() =>
@@ -1659,6 +1875,7 @@ export default function OrganizationFuelingPage() {
                       ETB
                     </span>
                   </div>
+
                 </CardContent>
               </Card>
             </div>
@@ -1686,6 +1903,7 @@ export default function OrganizationFuelingPage() {
                 </div>
 
                 <div className="divide-y">
+
                   <SummaryRow
                     label="Organization"
                     value={
@@ -1729,9 +1947,14 @@ export default function OrganizationFuelingPage() {
                     icon={Wallet}
                   />
 
+                  {/* FIXED: PAID */}
                   <SummaryRow
                     label="Payment status"
-                    value="Unpaid"
+                    value={
+                      <Badge className="border-emerald-200 bg-emerald-50 text-emerald-700">
+                        Paid
+                      </Badge>
+                    }
                     icon={Receipt}
                   />
 
@@ -1753,7 +1976,7 @@ export default function OrganizationFuelingPage() {
 
                 <div className="flex items-center justify-between bg-muted/50 px-5 py-4">
                   <span className="text-sm font-semibold text-muted-foreground">
-                    Total due
+                    Total paid
                   </span>
 
                   <span className="font-mono text-2xl font-bold tabular-nums">
@@ -1804,7 +2027,12 @@ export default function OrganizationFuelingPage() {
                   for{" "}
                   {
                     selectedOrg.name
-                  }.
+                  }{" "}
+                  with payment status{" "}
+                  <strong>
+                    PAID
+                  </strong>
+                  .
                 </AlertDescription>
               </Alert>
             </div>
@@ -1828,12 +2056,16 @@ export default function OrganizationFuelingPage() {
                   Fuel transaction created
                 </h2>
 
+                <p className="mt-1 text-sm text-muted-foreground">
+                  Payment has been recorded successfully.
+                </p>
+
                 <button
                   type="button"
                   onClick={
                     handleCopyReceiptId
                   }
-                  className="mx-auto mt-1 flex items-center gap-1.5 rounded-md px-2 py-0.5 text-sm text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                  className="mx-auto mt-2 flex items-center gap-1.5 rounded-md px-2 py-0.5 text-sm text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
                 >
                   Transaction{" "}
                   {receipt.id} ·{" "}
@@ -1901,6 +2133,21 @@ export default function OrganizationFuelingPage() {
                       }{" "}
                       ETB / L
                     </span>
+                  </div>
+
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">
+                      Payment
+                    </span>
+
+                    <Badge
+                      variant="outline"
+                      className="border-emerald-200 bg-emerald-50 text-emerald-700"
+                    >
+                      {
+                        receipt.paymentStatus
+                      }
+                    </Badge>
                   </div>
 
                   <Separator />
@@ -1978,7 +2225,9 @@ export default function OrganizationFuelingPage() {
               <p className="mb-2 flex items-center gap-1.5 text-xs text-muted-foreground">
                 <Info className="h-3.5 w-3.5" />
 
-                {blockingReason}
+                {
+                  blockingReason
+                }
               </p>
             )}
 
@@ -2017,7 +2266,8 @@ export default function OrganizationFuelingPage() {
                   type="button"
                   disabled={
                     !selectedOrg ||
-                    accessDenied
+                    accessDenied ||
+                    isSubmitting
                   }
                   className="h-12 flex-1 gap-2"
                   onClick={() =>

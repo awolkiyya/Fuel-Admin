@@ -46,33 +46,28 @@ export const OrganizationDropdown: React.FC<
           },
         });
 
-      let data: Organization[] =
-        result.data || [];
+      let data: Organization[] = result.data ?? [];
 
+      // Remove excluded organizations if provided.
       if (excludeIds.length > 0) {
-        const excluded = new Set(excludeIds);
+        const excludedIds = new Set(excludeIds);
 
         data = data.filter(
           (organization) =>
-            !excluded.has(organization.id),
+            !excludedIds.has(organization.id),
         );
       }
 
       return {
         data,
-        total:
-          result.meta?.total ??
-          data.length,
+        total: result.meta?.total ?? data.length,
       };
     },
     [excludeIds],
   );
 
   return (
-    <AsyncDropdown<
-      Organization,
-      string
-    >
+    <AsyncDropdown<Organization, string>
       value={value}
       onChange={onChange}
       fetchData={fetchData}
