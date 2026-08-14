@@ -58,8 +58,14 @@ services:
       - "443:443"
 
     volumes:
+      # Nginx configuration
       - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+
+      # Let's Encrypt certificates
       - /etc/letsencrypt:/etc/letsencrypt:ro
+
+      # Let's Encrypt ACME challenge files
+      - /var/www/certbot:/var/www/certbot:ro
 
     logging:
       driver: json-file
