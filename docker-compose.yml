@@ -1,4 +1,8 @@
 services:
+
+  # ==========================================
+  # NEXT.JS FRONTEND
+  # ==========================================
   frontend:
     build:
       context: .
@@ -14,6 +18,7 @@ services:
     environment:
       NODE_ENV: production
       PORT: 3000
+      HOSTNAME: 0.0.0.0
       TZ: Africa/Addis_Ababa
 
     expose:
@@ -25,7 +30,7 @@ services:
           "CMD",
           "node",
           "-e",
-          "fetch('http://localhost:3000').then(r => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))"
+          "fetch('http://127.0.0.1:3000').then(r => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))"
         ]
       interval: 30s
       timeout: 10s
@@ -42,6 +47,9 @@ services:
       - frontend-network
 
 
+  # ==========================================
+  # NGINX
+  # ==========================================
   nginx:
     image: nginx:alpine
 
@@ -58,13 +66,14 @@ services:
       - "443:443"
 
     volumes:
+
       # Nginx configuration
       - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
 
       # Let's Encrypt certificates
       - /etc/letsencrypt:/etc/letsencrypt:ro
 
-      # Let's Encrypt ACME challenge files
+      # Let's Encrypt ACME challenge
       - /var/www/certbot:/var/www/certbot:ro
 
     logging:
