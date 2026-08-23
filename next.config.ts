@@ -4,6 +4,13 @@ const nextConfig: NextConfig = {
 
   output:"standalone",
 
+  // --------------------------------------------------------
+  // SECURITY
+  // --------------------------------------------------------
+  // Prevent Next.js from exposing:
+  // X-Powered-By: Next.js
+  poweredByHeader: false,
+
   async rewrites() {
 
     const base = process.env.API_BASE_URL;
