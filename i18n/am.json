@@ -1,0 +1,442 @@
+{
+
+  "system": {
+    "title": "የCSRP ስርዓት",
+    "full_title": "የከተማ ስትራቴጂካዊ ዕቅድና ሪፖርት ስርዓት"
+  },
+    "nav": {
+      "shared": {
+        "platform": "ፕላትፎርም",
+        "settings": "ቅንብሮች",
+        "users": "ተጠቃሚዎች",
+        "roles": "ሚናዎች",
+        "cities": "ከተሞች",
+        "subcities": "ክፍለ ከተማ",
+        "weredas": "ወረዳ",
+        "clusters": "ክላስተሮች",
+        "sectors": "ዘርፎች",
+  
+        "create_template": "ቴምፕሌት ፍጠር",
+        "all_templates": "ሁሉም ቴምፕሌቶች",
+        "create_cycle": "ዑደት ፍጠር",
+        "active_cycles": "ንቁ ዑደቶች",
+        "all_cycles": "ሁሉም ዑደቶች",
+  
+        "objectives": "ስትራቴጂክ ግብ",
+        "activities": "ስትራቴጂክ እንቅስቃሴዎች",
+        "kpis_targets": "KPI እና ግቦች",
+  
+        "my_draft_plan": "የእኔ ረቂቅ ዕቅድ",
+        "submit_plan": "ዕቅድ አስገባ",
+        "submitted_plans": "የቀረቡ ዕቅዶች",
+  
+        "kpi_progress": "የKPI እድገት",
+        "evidence_upload": "ማስረጃ ጫን",
+  
+        "daily_reports": "ዕለታዊ ሪፖርቶች",
+        "weekly_reports": "ሳምንታዊ ሪፖርቶች",
+        "monthly_reports": "ወርሃዊ ሪፖርቶች",
+        "submitted_reports": "የቀረቡ ሪፖርቶች",
+  
+        "incoming_plans": "ገቢ ዕቅዶች",
+        "incoming_reports": "ገቢ ሪፖርቶች"
+      },
+  
+      "system_admin": {
+        "dashboard": "የስርዓት አጠቃላይ እይታ",
+        "governance": "የአስተዳደር መዋቅር",
+        "users": "ተጠቃሚዎች",
+        "users_roles": "ተጠቃሚዎች እና ሚናዎች",
+        "kpi_library": "የKPI ላይብረሪ",
+        "plan_templates": "የዕቅድ ቴምፕሌቶች",
+        "report_templates": "የሪፖርት ቴምፕሌቶች",
+        "plan_cycles": "የዕቅድ ዑደቶች",
+        "system_logs": "የስርዓት መዝገቦች"
+      },
+  
+      "city_mayor": {
+        "dashboard": "ማዕከላዊ ቁጥጥር",
+        "plans": {
+          "official": "ይፋዊ ዕቅዶች"
+        },
+        "reports": {
+          "official": "ይፋዊ ሪፖርቶች"
+        },
+        "submitted_plans": "የቀረቡ ዕቅዶች",
+        "submitted_reports": "የቀረቡ ሪፖርቶች"
+      },
+  
+      "city_manager": {
+        "dashboard": "ዳሽቦርድ",
+        "plan_cycles": "የዕቅድ ዑደቶች",
+        "sector_plans": "የዘርፍ ዕቅዶች",
+        "sector_reports": "የዘርፍ ሪፖርቶች"
+      },
+  
+      "sector": {
+        "dashboard": "ዳሽቦርድ",
+        "planning": "ዕቅድ ማዘጋጀት",
+        "plan_cycle": "የዕቅድ ዑደት",
+        "plan_builder": "ዕቅድ መገንቢያ",
+        "my_plans": "የእኔ ዕቅዶች",
+  
+        "execution": "አፈፃፀም",
+        "kpi_progress": "የKPI እድገት",
+        "evidence_upload": "ማስረጃ መጫን",
+  
+        "reports": "ሪፖርቶች",
+        "generate_report": "ሪፖርት መፍጠር",
+        "my_reports": "የእኔ ሪፖርቶች",
+  
+        "subordinate_submissions": "የበታች አካላት ማቅረቢያዎች",
+  
+        "inbox": "ገቢ ሳጥን",
+        "plans_to_review": "ለመመርመር የቀረቡ ዕቅዶች",
+        "reports_to_review": "ለመመርመር የቀረቡ ሪፖርቶች"
+      },
+  
+      "user": {
+        "settings": "ቅንብሮች",
+        "notifications": "ማሳወቂያዎች",
+        "logout": "ውጣ"
+      }
+    },
+    "inbox": {
+      "title": "ገቢ ሳጥን",
+      "description": "የገቡ ዕቅዶችን እና ሪፖርቶችን ይመርምሩ እና ያስተዳድሩ",
+  
+      "plans": {
+        "title": "ለመመርመር የቀረቡ ዕቅዶች",
+        "description": "የቀረቡ ስትራቴጂካዊ ዕቅዶችን ከመፈቀድ በፊት ይመርምሩ",
+  
+        "empty": {
+          "title": "ምንም ዕቅድ የለም",
+          "description": "አዲስ ዕቅዶች ሲቀርቡ እዚህ ይታያሉ",
+          "icon": "Inbox"
+        },
+  
+        "actions": {
+          "view": "ይመልከቱ",
+          "review": "ይመርምሩ",
+          "refresh": "አድስ",
+          "verify": "አረጋግጥ",
+          "approve": "ፍቀድ"
+        }
+      },
+  
+      "reports": {
+        "title": "ለመመርመር የቀረቡ ሪፖርቶች",
+        "description": "ከተፈቀዱ ዕቅዶች ጋር የተያያዙ ሪፖርቶችን ይገምግሙ",
+  
+        "empty": {
+          "title": "ምንም ሪፖርት የለም",
+          "description": "የመምሪያዎች ሪፖርቶች እዚህ ይታያሉ",
+          "icon": "BarChart3"
+        },
+  
+        "actions": {
+          "view": "ይመልከቱ",
+          "review": "ይመርምሩ"
+        }
+      },
+  
+      "status": {
+        "draft": "ረቂቅ",
+        "submitted": "ቀርቧል",
+        "verified": "ተረጋግጧል",
+        "approved": "ተፈቅዷል",
+        "rejected": "ተቋርጧል",
+        "pending": "በመጠባበቅ ላይ",
+        "in_review": "በመመርመር ላይ",
+        "needs_revision": "ማሻሻያ ያስፈልጋል"
+      },
+  
+      "level": {
+        "city": "ከተማ",
+        "subcity": "ክፍለ ከተማ",
+        "wereda": "ወረዳ"
+      },
+  
+      "documents": {
+        "pdf_ready": "PDF ተፈጥሯል",
+        "pdf_missing": "PDF ገና አልተፈጠረም",
+        "docx_ready": "የወርድ ሰነድ ተፈጥሯል",
+        "docx_missing": "የወርድ ሰነድ ገና አልተፈጠረም"
+      },
+  
+      "search": {
+        "placeholder": "ሪፖርቶችን በርዕስ፣ በቅጽ ወይም በአቅራቢ ይፈልጉ",
+        "clear": "ፍለጋ አጽዳ",
+        "no_results": {
+          "title": "ምንም ተመሳሳይ ሪፖርት አልተገኘም",
+          "description": "የተለየ ርዕስ፣ ቅጽ ወይም አቅራቢ ይሞክሩ"
+        }
+      },
+  
+      "pagination": {
+        "showing": "{from}–{to} ከ {total} በማሳየት ላይ",
+        "previous": "የቀድሞ ገጽ",
+        "next": "ቀጣይ ገጽ"
+      },
+  
+      "meta": {
+        "report": "ሪፖርት",
+        "level": "ደረጃ",
+        "period": "ወቅት",
+        "submitted_by": "የቀረበው በ",
+        "submitted_at": "የቀረበበት ቀን",
+        "linked_plan": "ተያያዥ ዕቅድ",
+        "progress": "እድገት",
+        "documents": "ሰነዶች",
+        "status": "ሁኔታ",
+        "actions": "ተግባራት",
+        "total": "ጠቅላላ",
+        "pending_review": "ለመመርመር በመጠባበቅ ላይ",
+        "rejected": "ተቋርጧል",
+        "not_submitted": "አልቀረበም"
+      }
+    },
+
+  "settings": {
+    "title": "የስርዓት ቅንብሮች",
+    "description": "ማንነት፣ የአስተዳደር ደረጃ እና የስርዓት ባህሪን ያስተዳድሩ",
+
+    "tabs": {
+      "account": "መለያ",
+      "preferences": "ምርጫዎች",
+      "language": "ቋንቋ"
+    },
+
+    "account": {
+      "title": "የመለያ አጠቃላይ እይታ",
+      "description": "የማንነት እና የአስተዳደር መዳረሻ መረጃ",
+
+      "role": "ሚና",
+      "level": "ደረጃ",
+      "sector": "ሴክተር",
+      "cluster": "ክላስተር",
+      "city": "ከተማ",
+      "subcity": "ክፍለ ከተማ",
+      "wereda": "ወረዳ",
+      "last_login": "የመጨረሻ ግባ",
+      "unknown": "ያልታወቀ"
+    },
+
+    "preferences": {
+      "title": "የስርዓት ምርጫዎች",
+      "description": "የስርዓቱን ባህሪ እና የተጠቃሚ ተሞክሮ ይቆጣጠሩ",
+
+      "dark_mode": "ጨለማ ሁኔታ",
+      "dark_mode_desc": "በብርሃን እና በጨለማ ገጽታ መካከል ይቀይሩ",
+
+      "system_theme": "የስርዓት ገጽታ",
+      "system_theme_desc": "የመሣሪያውን ገጽታ በራስ-ሰር ይከተሉ"
+    },
+
+    "language": {
+      "title": "የአካባቢ ቅንብር",
+      "description": "የስርዓት ቋንቋ እና የአካባቢ ማሳያ ምርጫዎችን ያስተካክሉ",
+
+      "system_language": "የስርዓት ቋንቋ",
+      "placeholder": "ቋንቋ ይምረጡ",
+
+      "interface_note": "በመገናኛ ጽሑፎች፣ በመጓጓዣ ምልክቶች እና በስርዓት መልዕክቶች ላይ ተጽዕኖ ያሳድራል።",
+
+      "active_language": "ንቁ ቋንቋ",
+      "active_language_desc": "በአሁኑ ጊዜ የተተገበረው የስርዓት ቋንቋ",
+
+      "english": "እንግሊዝኛ",
+      "amharic": "አማርኛ",
+      "oromo": "ኦሮምኛ",
+
+      "unknown": "ያልታወቀ"
+    }
+  },
+    "landing_page": {
+      "nav": {
+        "overview": "አጠቃላይ እይታ",
+        "structure": "የስራ መዋቅር",
+        "workflow": "የስራ ፍሰት",
+        "portal_login": "የፖርታል መግቢያ",
+        "close": "ዝጋ"
+      },
+  
+      "hero": {
+        "title": "የዘመናዊ ዕቅድ እና ሪፖርት ስርዓት",
+        "description": "በአዳማ ከተማ በሁሉም የአስተዳደር ደረጃዎች የተዋቀረ ዕቅድ፣ ክትትል እና ሪፖርት ለማድረግ ማዕከላዊ የዲጂታል አስተዳደር ፕላትፎርም።",
+        "access": "ደህንነቱ የተጠበቀ ስርዓትን ይጠቀሙ",
+  
+        "metrics": {
+          "adminlevel": "የአስተዳደር ደረጃዎች",
+          "secureAccess": "አስተማማኝ መዳረሻ",
+          "digitalWorkflow": "ዲጂታል የስራ ፍሰት",
+          "encrypted": "የተመሰጠረ"
+        }
+      },
+  
+      "overview": {
+        "badge": "የፕላትፎርም አጠቃላይ እይታ",
+        "title": "የተዋሃደ የዲጂታል አስተዳደር ስርዓት",
+        "description": "ዕቅድ፣ ትግበራ፣ ክትትል፣ ግምገማ እና ሪፖርት በአንድ ደህንነቱ የተጠበቀ እና ግልጽ ስርዓት ውስጥ የሚያገናኝ የተዋሃደ ፕላትፎርም።",
+  
+        "cards": {
+          "strategic_planning": {
+            "title": "ስትራቴጂካዊ ዕቅድ",
+            "description": "ከልማት ግቦች እና ከተቋማዊ ቅድሚያዎች ጋር የተስማማ የዓመታዊ፣ ወርሃዊ እና የዘርፍ ዕቅዶችን ማዘጋጀት።"
+          },
+  
+          "performance_monitoring": {
+            "title": "የአፈጻጸም ክትትል",
+            "description": "የትግበራ ሂደት፣ የKPI አፈጻጸም እና የተቋማዊ ተግባራትን መከታተል።"
+          },
+  
+          "secure_governance": {
+            "title": "ደህንነቱ የተጠበቀ አስተዳደር",
+            "description": "የተማከለ አስተዳደር፣ የተቆጣጠረ የመዳረሻ አስተዳደር እና ደህንነቱ የተጠበቀ የዲጂታል ስራ ሂደቶችን ማረጋገጥ።"
+          }
+        }
+      },
+  
+      "structure": {
+        "badge": "የአስተዳደር መዋቅር",
+        "title": "የብዙ ደረጃ አስተዳደር ድጋፍ",
+        "description": "በአዳማ ከተማ ውስጥ የተቀናጀ የዕቅድ እና የሪፖርት ስራዎችን ለመደገፍ የተነደፈ።",
+  
+        "cards": {
+          "city_administration": {
+            "title": "የከተማ አስተዳደር",
+            "description": "ስትራቴጂካዊ ቁጥጥር፣ ከፍተኛ የእቅድ አወጣጥ እና ማዕከላዊ ሪፖርት አስተዳደር።"
+          },
+  
+          "subcity_administration": {
+            "title": "የክፍለ ከተማ አስተዳደር",
+            "description": "የተቋማዊ ቅንጅት እና የተዋሃደ የአፈጻጸም ሪፖርት አስተዳደር።"
+          },
+  
+          "wereda_administration": {
+            "title": "የወረዳ አስተዳደር",
+            "description": "የማህበረሰብ ደረጃ ትግበራ ክትትል እና የአካባቢ ሪፖርት አስተዳደር።"
+          },
+  
+          "sector_offices": {
+            "title": "የዘርፍ ቢሮዎች",
+            "description": "የዘርፍ ስራ እቅድ፣ የሰነድ አስተዳደር ሂደቶች እና የአገልግሎት አስተዳደር።"
+          }
+        }
+      },
+  
+      "workflow": {
+        "badge": "የስርዓት መዋቅር",
+        "title": "የተዋቀረ ዲጂታል የስራ ሂደት",
+        "description": "ከዕቅድ ጀምሮ እስከ የመጨረሻ የአስፈፃሚ ሪፖርት ድረስ የሚያደርስ ባለ ሶስት ደረጃ ሂደት።",
+  
+        "steps": {
+          "planning": {
+            "title": "ዕቅድ",
+            "description": "ስትራቴጂካዊ ዕቅዶች፣ ግቦች፣ ተግባራት እና KPI ማዘጋጀት።"
+          },
+  
+          "execution": {
+            "title": "ትግበራ እና ክትትል",
+            "description": "የስራ ሂደትን መከታተል፣ KPI ማዘመን እና ማስረጃ መጫን።"
+          },
+  
+          "reporting": {
+            "title": "ሪፖርት እና ግምገማ",
+            "description": "የተዋቀረ ሪፖርት መፍጠር፣ ውጤት መገምገም እና የአመራር ውሳኔን መደገፍ።"
+          }
+        }
+      },
+      "security": {
+        "badge": "የደህንነት አርክቴክቸር",
+        "title": "የተጠበቀ የእቅድ እና ሪፖርት ፍሰት ስርዓት",
+        "description": "ከሁሉም የአስተዳደር ደረጃዎች የሚመጡ የእቅድ መረጃዎች በሁሉም ደረጃ ይጠበቃሉ — ከመላክ ጀምሮ እስከ ኢንክሪፕሽን፣ ማረጋገጫ እና የማይቀየር የኦዲት መዝገብ ድረስ።",
+      
+        "cards": {
+          "tls": {
+            "title": "TLS 1.3",
+            "description": "ሁሉም የእቅድ መላኪያ መረጃዎች በዘመናዊው የTransport Layer Security መስፈርት በመጠቀም በመሄድ ላይ እንዲሁም በኢንክሪፕት ይጠበቃሉ።"
+          },
+          "jwt": {
+            "title": "JWT Auth",
+            "description": "የተፈረመ ቶከኖች እያንዳንዱን ጥያቄ ያረጋግጣሉ፣ ብቻ የተፈቀዱ የአስተዳደር ደረጃዎች ሪፖርት ማስገባት ወይም ማየት እንዲችሉ።"
+          },
+          "aes": {
+            "title": "AES-256",
+            "description": "ሁሉም የተከማቹ የእቅድ እና ሪፖርት መረጃዎች በወታደራዊ ደረጃ የሲሜትሪክ ኢንክሪፕሽን ይጠበቃሉ።"
+          },
+          "audit": {
+            "title": "የኦዲት መዝገብ",
+            "description": "እያንዳንዱ የእቅድ እንቅስቃሴ በማይቀየር መዝገብ ውስጥ ይመዘገባል፣ ሙሉ ተጠያቂነትን ያረጋግጣል።"
+          }
+        }
+      }
+    },
+    "auth": {
+      "welcome": "እንኳን ደህና መጡ",
+    
+      "system": "CSPP ሲስተም",
+    
+      "fields": {
+        "email": "ኢሜይል አድራሻ",
+        "password": "የይለፍ ቃል"
+      },
+    
+      "placeholders": {
+        "email": "admin@example.com",
+        "password": "••••••••"
+      },
+    
+      "actions": {
+        "login": "በደህንነት ግባ",
+        "logging_in": "በመግባት ላይ..."
+      },
+    
+      "footer": {
+        "developer": "የተሰራው በ",
+        "developer_name": "ሶፍትዌር ኢንጂነር አዎል አብዱልባሲት",
+        "terms": "በመቀጠል የስርዓቱን ውሎች፣ የግል ፖሊሲ እና የተፈቀደ አጠቃቀም ደንቦችን ተቀብለዋል።"
+      }
+    },
+    "mayor_dashboard": {
+      "header": {
+        "city_office": "የአዳማ ከተማ · የከንቲባ ቢሮ",
+        "title": "የአፈፃፀም መረጃ ማዕከል",
+        "subtitle": "በሁሉም የመንግስት ዘርፎች ላይ የቅጽበታዊ KPI እይታ",
+        "live": "በቀጥታ",
+        "custom_view": "የተለየ እይታ",
+        "yearly_view": "ዓመታዊ እይታ",
+        "active_period": "ንቁ ጊዜ"
+      },
+      "kpi_snapshot": {
+        "active_sectors": "ንቁ ዘርፎች",
+        "active_sectors_sub": "ሁሉም በስራ ላይ",
+    
+        "high_risk_sectors": "ከፍተኛ አደጋ ዘርፎች",
+        "high_risk_sectors_sub": "{atRisk} አደጋ ላይ · {lagging} ዝቅተኛ",
+    
+        "city_avg_performance": "የከተማ አማካይ አፈፃፀም",
+        "city_avg_performance_sub": "የዚህ ዓመት",
+    
+        "kpis_on_track": "በመንገድ ላይ KPIዎች",
+        "kpis_on_track_sub": "{onTrack} / {total} · {coverage}% ሽፋን"
+      },
+      "tabs": {
+        "overview": "አጠቃላይ እይታ",
+        "sectors": "ዘርፎች",
+        "comparison": "ንጽጽር",
+        "risk_map": "የአደጋ ካርታ"
+      },
+      "trends": {
+        "city_kpi_trend": "የከተማ KPI አዝማሚያ — ከሐምሌ እስከ ሰኔ {year}",
+        "twelve_month_view": "የ12 ወር እይታ"
+      },
+      "charts": {
+        "sector_balance_title": "የዘርፍ ሚዛን — እውነተኛ vs ግብ"
+      }
+    
+    }
+
+
+  
+}

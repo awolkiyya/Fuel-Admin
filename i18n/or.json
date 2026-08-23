@@ -1,0 +1,440 @@
+{
+  "auth": {
+    "welcome": "Baga Nagaan Dhuftan",
+  
+    "system": "Sirna CSPP",
+  
+    "fields": {
+      "email": "Teessoo Imeelii",
+      "password": "Jecha Darbii"
+    },
+  
+    "placeholders": {
+      "email": "admin@example.com",
+      "password": "••••••••"
+    },
+  
+    "actions": {
+      "login": "Nagaan Seeni",
+      "logging_in": "Seenaa jira..."
+    },
+  
+    "footer": {
+      "developer": "Kan qophaa'e",
+      "developer_name": "Injinarara Sooftweer Awol Abdulbaasit",
+      "terms": "Itti fufuun, seerota sirna kanaa, imaammata iccitii fi itti fayyadama hayyamame ni fudhattan."
+    }
+  },
+
+  "system": {
+    "title": "Sirna CSRP",
+    "full_title": "Sirna Karooraa fi Gabaasa Tarsiimoo Magaalaa"
+  },
+
+    "nav": {
+      "shared": {
+        "platform": "Platform",
+        "settings": "Qindaa'ina",
+        "users": "Fayyadamtoota",
+        "roles": "Gahee",
+        "cities": "Magaalota",
+        "subcities": "Kutaa Magaalaa",
+        "weredas": "Aanaa",
+        "clusters": "Kilaastara",
+        "sectors": "Sektaroota",
+  
+        "create_template": "Teempileetii Uumi",
+        "all_templates": "Teempileetota Hunda",
+        "create_cycle": "Marsaa Uumi",
+        "active_cycles": "Marsaa Hojii Irra Jiran",
+        "all_cycles": "Marsaa Hunda",
+  
+        "objectives": "Galmoota Tarsiimawaa",
+        "activities": "Hojii Tarsiimawaa",
+        "kpis_targets": "KPI fi Galma",
+  
+        "my_draft_plan": "Karoora Koo",
+        "submit_plan": "Karoora Galchi",
+        "submitted_plans": "Karoorawwan Koo",
+  
+        "kpi_progress": "Guddina KPI",
+        "evidence_upload": "Ragaa Olkaa'i",
+  
+        "daily_reports": "Gabaasa Guyyaa",
+        "weekly_reports": "Gabaasa Torbanii",
+        "monthly_reports": "Gabaasa Ji'aa",
+        "submitted_reports": "Gabaasa Koo",
+  
+        "incoming_plans": "Karoorawwan Seenaa",
+        "incoming_reports": "Gabaasa Seenaa"
+      },
+  
+      "system_admin": {
+        "dashboard": "Haala Sirnaa Waliigalaa",
+        "governance": "Caasaa Bulchiinsa",
+        "users": "Fayyadamtoota",
+        "users_roles": "Fayyadamtootaa fi Gahee",
+        "kpi_library": "Kuusaa KPI",
+        "plan_templates": "Teempileetota Karooraa",
+        "report_templates": "Teempileetota Gabaasaa",
+        "system_logs": "Galmee Sirnaa"
+      },
+  
+      "city_mayor": {
+        "dashboard": "Ajaja Giddugaleessaa",
+        "plans": {
+          "official": "Karoora Sirrii"
+        },
+        "reports": {
+          "official": "Gabaasa Sirrii"
+        },
+        "submitted_plans": "Karoorawwan Galfaman",
+        "submitted_reports": "Gabaasa Galfaman"
+      },
+  
+      "city_manager": {
+        "dashboard": "Daashboordii",
+        "plan_cycles": "Marsaa Karooraa",
+        "sector_plans": "Karoorawwan Sektaraa",
+        "sector_reports": "Gabaasa Sektaraa"
+      },
+  
+      "sector": {
+        "dashboard": "Daashboordii",
+  
+        "planning": "Karoorsuu",
+        "plan_cycle": "Marsaa Karooraa",
+        "plan_builder": "Ijaarsa Karooraa",
+        "my_plans": "Karoorawwan Koo",
+  
+        "execution": "Raawwii",
+        "kpi_progress": "Guddina KPI",
+        "evidence_upload": "Ragaa Olkaa'i",
+  
+        "reports": "Gabaasa",
+        "generate_report": "Gabaasa Uumi",
+        "my_reports": "Gabaasa Koo",
+  
+        "subordinate_submissions": "Galchawwan Sadarkaa Gad-aanaa",
+  
+        "inbox": "Galaa",
+        "plans_to_review": "Karoorawwan Ilaaluu",
+        "reports_to_review": "Gabaasota Ilaaluu"
+      },
+  
+      "user": {
+        "settings": "Qindaa'ina",
+        "notifications": "Beeksisa",
+        "logout": "Ba'i"
+      }
+    },
+    "inbox": {
+      "title": "Seenaa Galchaa",
+      "description": "Karoorawwan fi gabaasota dhufan hordofii fi to'achi",
+  
+      "plans": {
+        "title": "Karoorawwan Mirkaneessuuf Dhiyaatan",
+        "description": "Karoorawwan tarsiimoo dhiyaatan mirkaneessi ykn gadi dhiisi",
+  
+        "empty": {
+          "title": "Karoora Hin Jiru",
+          "description": "Yeroo karoorri haaraan dhiyaatu asitti mul’ata",
+          "icon": "Inbox"
+        },
+  
+        "actions": {
+          "view": "Ilaali",
+          "review": "Mirkaneessi",
+          "refresh": "Haaromsi",
+          "verify": "Mirkaneessi",
+          "approve": "Hayyamsiisi"
+        }
+      },
+  
+      "reports": {
+        "title": "Gabaasota Mirkaneessuuf Dhiyaatan",
+        "description": "Gabaasota raawwii karoora waliin walqabatan mirkaneessi",
+  
+        "empty": {
+          "title": "Gabaasa Hin Jiru",
+          "description": "Gabaasotni dhaabbilee asitti mul’atu",
+          "icon": "BarChart3"
+        },
+  
+        "actions": {
+          "view": "Ilaali",
+          "review": "Mirkaneessi"
+        }
+      },
+  
+      "status": {
+        "draft": "Qabiyyee Diraaftii",
+        "submitted": "Dhiyaateera",
+        "verified": "Mirkanaa’eera",
+        "approved": "Hayyamameera",
+        "rejected": "Didameera",
+        "pending": "Eegamaa Jira",
+        "in_review": "Qorannoo Irratti Jira",
+        "needs_revision": "Fooyya’iinsa barbaada"
+      },
+  
+      "level": {
+        "city": "Magaalaa",
+        "subcity": "Magaalaa Gudditti",
+        "wereda": "Aanaa"
+      },
+  
+      "documents": {
+        "pdf_ready": "PDF Uumameera",
+        "pdf_missing": "PDF Hin Uumamne",
+        "docx_ready": "Sanadni Word Uumameera",
+        "docx_missing": "Sanadni Word Hin Uumamne"
+      },
+  
+      "search": {
+        "placeholder": "Gabaasota mataduree, qajeelfama ykn nama dhiyeessee barbaadi",
+        "clear": "Barbaacha Haqi",
+        "no_results": {
+          "title": "Gabaasni wal fakkaatu hin argamne",
+          "description": "Mataduree, qajeelfama ykn nama dhiyeesse biraa yaali"
+        }
+      },
+  
+      "pagination": {
+        "showing": "{from}–{to} kan {total} argisiisaa jira",
+        "previous": "Fuula Duraa",
+        "next": "Fuula Itti Aanu"
+      },
+  
+      "meta": {
+        "report": "Gabaasa",
+        "level": "Sadarkaa",
+        "period": "Yeroo",
+        "submitted_by": "Kan Dhiyeesse",
+        "submitted_at": "Yeroo Dhiyaate",
+        "linked_plan": "Karoora Walqabatu",
+        "progress": "Guddina",
+        "documents": "Sanadoota",
+        "status": "Haala",
+        "actions": "Tarkaanfii",
+        "total": "Waliigala",
+        "pending_review": "Mirkaneessuu Eegamaa",
+        "rejected": "Didameera",
+        "not_submitted": "Hin Dhiyaanne"
+      }
+    },
+
+  "settings": {
+    "title": "Qindaa'ina Sirnaa",
+    "description": "Eenyummaa, mootummaa bulchiinsaa fi hojii sirnaa to’achuu",
+
+    "tabs": {
+      "account": "Akkaawuntii",
+      "preferences": "Filannoo",
+      "language": "Afaan"
+    },
+
+    "account": {
+      "title": "Haala Waliigalaa Akkaawuntii",
+      "description": "Odeeffannoo eenyummaa fi mootummaa mootummaa",
+
+      "role": "Gahee",
+      "level": "Sadarkaa",
+      "sector": "Seektara",
+      "cluster": "Kilaastara",
+      "city": "Magaalaa",
+      "subcity": "Kutaa Magaalaa",
+      "wereda": "Aanaa",
+      "last_login": "Seensa Dhumaa",
+      "unknown": "Kan Hin Beekamne"
+    },
+
+    "preferences": {
+      "title": "Filannoo Sirnaa",
+      "description": "Hojii sirnaa fi muuxannoo fayyadamaa to’achuu",
+
+      "dark_mode": "Haala Dukkanaa",
+      "dark_mode_desc": "Gidduu ifaa fi dukkanaa jijjiiri",
+
+      "system_theme": "Bifa Sirnaa",
+      "system_theme_desc": "Bifa meeshaa ofumaan hordofi"
+    },
+
+    "language": {
+      "title": "Qindaa’ina Naannoo",
+      "description": "Afaan sirnaa fi filannoo agarsiisa mootummaa qindeessi",
+
+      "system_language": "Afaan Sirnaa",
+      "placeholder": "Afaan filadhu",
+
+      "interface_note": "Barruulee interface, navigation fi ergaawwan sirnaa irratti hojii qaba.",
+
+      "active_language": "Afaan Hojii Irra Jiru",
+      "active_language_desc": "Afaan sirnaa yeroo ammaa hojii irra jiru",
+
+      "english": "English",
+      "amharic": "Amaariffa",
+      "oromo": "Afaan Oromoo",
+
+      "unknown": "Kan Hin Beekamne"
+    }
+  },
+    "landing_page": {
+      "nav": {
+        "overview": "Ilaalcha Waliigalaa",
+        "structure": "Caasaa",
+        "workflow": "Adeemsa Hojii",
+        "portal_login": "Seensa Poortaalaa",
+        "close": "Cufuu"
+      },
+  
+      "hero": {
+        "title": "Sirna Karoora fi Gabaasa Ismaartii",
+        "description": "Waltajjii bulchiinsa dijitaalaa giddugaleessaa kan karoora, hordoffii fi gabaasa sirnaan qindaa’e sadarkaa bulchiinsa Magaalaa Adaamaa hunda keessatti.",
+        "access": "Sirna Eeggumsa Qabu Seeni",
+  
+        "metrics": {
+          "adminlevel": "Sadarkaa Bulchiinsaa",
+          "secureAccess": "Seensa Nageenya Qabu",
+          "digitalWorkflow": "Adeemsa Hojii Dijitaalaa",
+          "encrypted": "Iccitii (Encrypted)"
+        }
+      },
+  
+      "overview": {
+        "badge": "Ilaalcha Pilaatafoormii",
+        "title": "Sirna Bulchiinsa Dijitaalaa Walitti Hidhame",
+        "description": "Pilaatafoormii tokkotti kan karoora, raawwii, hordoffii, gamaaggama fi gabaasa walitti fidu kan nageenyaafi iftoomina qabu.",
+  
+        "cards": {
+          "strategic_planning": {
+            "title": "Karoora Tarsiimoo",
+            "description": "Karoora waggaa, ji’aa fi damee irratti hundaa’e kan galma misoomaa fi kaayyoo dhaabbataa waliin walsimu qopheessuu."
+          },
+  
+          "performance_monitoring": {
+            "title": "Hordoffii Raawwii",
+            "description": "Haalojii hojii, raawwii KPI, fi gahumsa hojii dhaabbataa hordofuu."
+          },
+  
+          "secure_governance": {
+            "title": "Bulchiinsa Nageenya Qabu",
+            "description": "Bulchiinsa giddugaleessaa, seensa to’annoo qabu, fi adeemsa hojii dijitaalaa nageenya qabu mirkaneessuu."
+          }
+        }
+      },
+  
+      "structure": {
+        "badge": "Caasaa Bulchiinsaa",
+        "title": "Deeggarsa Bulchiinsa Sadarkaa Adda Addaa",
+        "description": "Caasaa bulchiinsaa Magaalaa Adaamaa keessatti karoora fi gabaasa qindoominaan gaggeessuuf.",
+  
+        "cards": {
+          "city_administration": {
+            "title": "Bulchiinsa Magaalaa",
+            "description": "To’annoo tarsiimoo, karoora olaanaa fi gabaasa giddugaleessaa."
+          },
+  
+          "subcity_administration": {
+            "title": "Bulchiinsa Kutaa Magaalaa",
+            "description": "Qindoomina dhaabbataa fi gabaasa raawwii hojii walitti hidhame."
+          },
+  
+          "wereda_administration": {
+            "title": "Bulchiinsa Aanaa",
+            "description": "Hordoffii hojii sadarkaa hawaasaa fi gabaasa naannoo irratti hundaa’e."
+          },
+  
+          "sector_offices": {
+            "title": "Waajjiraalee Damee",
+            "description": "Karoora hojii damee, galmee hojii fi tajaajila mootummaa."
+          }
+        }
+      },
+  
+      "workflow": {
+        "badge": "Caaseffama Sirnaa",
+        "title": "Adeemsa Hojii Dijitaalaa Sirnaa",
+        "description": "Adeemsa hojii sadarkaa sadi kan karoora irraa kaasee hanga gabaasa xumuraatti.",
+  
+        "steps": {
+          "planning": {
+            "title": "Karoora",
+            "description": "Karoora tarsiimoo, galma, hojii fi KPI qopheessuu."
+          },
+  
+          "execution": {
+            "title": "Raawwii fi Hordoffii",
+            "description": "Haalojii hojii hordofuu, KPI fooyyessuu fi ragaa olkaa’uu."
+          },
+  
+          "reporting": {
+            "title": "Gabaasa fi Gamaaggama",
+            "description": "Gabaasa qindaa’e uumu, bu’aa xiinxaluu fi murtii mootummaa deeggaru."
+          }
+        }
+      },
+      "security": {
+        "badge": "Arkiteekchara Nageenyaa",
+        "title": "Sirna Karoora fi Gabaasa Nageenya Qabuu",
+        "description": "Daataan karooraa sadarkaa bulchiinsaa hunda irraa dhufu sadarkaa hunda irratti ni eegama — ergaa irraa kaasee hanga icciitii (encryption), mirkaneessaa fi galmee qorannoo hin jijjiiramne (audit log)tti.",
+      
+        "cards": {
+          "tls": {
+            "title": "TLS 1.3",
+            "description": "Ergaan karooraa hundi yeroo dabarsamu TLS (Transport Layer Security) isa ammayyaa fayyadamuun icciitiin ni eegama."
+          },
+          "jwt": {
+            "title": "JWT Auth",
+            "description": "Tokkonnawwan mallatteeffaman gaaffii hunda ni mirkaneessu, sadarkaa hayyama argate qofa gabaasa galchuu fi ilaalu akka danda’an taasisa."
+          },
+          "aes": {
+            "title": "AES-256",
+            "description": "Karoora fi gabaasni kuufaman hundi icciitii simmeetirikii sadarkaa waraanaa (AES-256) fayyadamuun ni eegama."
+          },
+          "audit": {
+            "title": "Galmee Qorannoo (Audit Trail)",
+            "description": "Sochiin karooraa hundi galmee hin jijjiiramne keessatti ni kaa’ama, itti gaafatamummaa guutuu ni mirkaneessa."
+          }
+        }
+      }
+    },
+    "mayor_dashboard": {
+      "header": {
+        "city_office": "Magaalaa Adaamaa · Waajjira Kantiibaa",
+        "title": "Wiirtuu Odeeffannoo Raawwii",
+        "subtitle": "Ilaalcha KPI yeroo dhugaa dameelee mootummaa hunda irratti",
+        "live": "Yeroo Dhugaa",
+        "custom_view": "Ilaalcha Addaa",
+        "yearly_view": "Ilaalcha Waggoota",
+        "active_period": "Yeroo Hojii Jiru"
+      },
+      "kpi_snapshot": {
+        "active_sectors": "Sektaroota Hojii Irra Jiran",
+        "active_sectors_sub": "Hundi hojii irra jiru",
+    
+        "high_risk_sectors": "Sektaroota Balaa Ol'aanaa",
+        "high_risk_sectors_sub": "{atRisk} balaa keessa · {lagging} duubatti hafan",
+    
+        "city_avg_performance": "Raawwii Giddugaleessa Magaalaa",
+        "city_avg_performance_sub": "Waggaa kana",
+    
+        "kpis_on_track": "KPI Kallattii Sirrii",
+        "kpis_on_track_sub": "{onTrack} / {total} · {coverage}% haguuggii"
+      },
+      "tabs": {
+        "overview": "Ilaalcha Waliigalaa",
+        "sectors": "Sektaroota",
+        "comparison": "Walbira Qabuu",
+        "risk_map": "Kaartaa Balaa"
+      },
+      "trends": {
+        "city_kpi_trend": "Jijjiirama KPI Magaalaa — Adoolessa irraa hanga Waxabajjii {year}",
+        "twelve_month_view": "Ilaalcha ji'a 12"
+      },
+      "charts": {
+        "sector_balance_title": "Dhangala'ina Sektaraa — dhugaa vs kaayyoo"
+      }
+    }
+  
+}
