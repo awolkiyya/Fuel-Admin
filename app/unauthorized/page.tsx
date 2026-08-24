@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import {
@@ -10,16 +11,10 @@ import {
   Lock,
 } from "lucide-react";
 
-export default function UnauthorizedPage() {
+function UnauthorizedContent() {
   const searchParams = useSearchParams();
 
   const reason = searchParams.get("reason");
-
-  /**
-   * =====================================================
-   * MESSAGE
-   * =====================================================
-   */
 
   const getMessage = () => {
     switch (reason) {
@@ -37,12 +32,6 @@ export default function UnauthorizedPage() {
     }
   };
 
-  /**
-   * =====================================================
-   * ICON
-   * =====================================================
-   */
-
   const getIcon = () => {
     switch (reason) {
       case "not_authenticated":
@@ -55,7 +44,6 @@ export default function UnauthorizedPage() {
           <UserX className="h-10 w-10 text-red-500" />
         );
 
-      case "access_denied":
       default:
         return (
           <ShieldAlert className="h-10 w-10 text-red-500" />
@@ -63,28 +51,16 @@ export default function UnauthorizedPage() {
     }
   };
 
-  /**
-   * =====================================================
-   * PAGE
-   * =====================================================
-   */
-
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-6">
       <div className="w-full max-w-md space-y-6 text-center animate-fade-in">
 
-        {/* =================================================
-            ICON
-        ================================================= */}
-
+        {/* ICON */}
         <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-2xl border bg-red-500/10">
           {getIcon()}
         </div>
 
-        {/* =================================================
-            TITLE
-        ================================================= */}
-
+        {/* TITLE + MESSAGE */}
         <div className="space-y-2">
           <h1 className="text-3xl font-bold tracking-tight">
             Access Restricted
@@ -95,13 +71,8 @@ export default function UnauthorizedPage() {
           </p>
         </div>
 
-        {/* =================================================
-            ACTIONS
-        ================================================= */}
-
+        {/* ACTIONS */}
         <div className="flex flex-col justify-center gap-3 pt-2 sm:flex-row">
-
-          {/* GO BACK */}
 
           <Button
             type="button"
@@ -113,8 +84,6 @@ export default function UnauthorizedPage() {
             Go Back
           </Button>
 
-          {/* DASHBOARD */}
-
           <Link href="/dashboard">
             <Button
               type="button"
@@ -123,17 +92,39 @@ export default function UnauthorizedPage() {
               Go to Dashboard
             </Button>
           </Link>
+
         </div>
 
-        {/* =================================================
-            FOOTER
-        ================================================= */}
-
+        {/* FOOTER */}
         <div className="border-t pt-6 text-xs text-muted-foreground">
           Adama City Commercial Enforcement System
         </div>
 
       </div>
     </div>
+  );
+}
+
+/**
+ * =====================================================
+ * PAGE
+ * =====================================================
+ *
+ * useSearchParams() requires a Suspense boundary
+ * during Next.js prerendering.
+ */
+export default function UnauthorizedPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex min-h-screen items-center justify-center bg-background px-6">
+          <div className="text-sm text-muted-foreground">
+            Loading...
+          </div>
+        </div>
+      }
+    >
+      <UnauthorizedContent />
+    </Suspense>
   );
 }
